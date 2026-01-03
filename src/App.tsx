@@ -1,51 +1,73 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/core";
-import "./App.css";
+import React, { useState } from 'react';
+import Sidebar from './components/Sidebar';
+import Dashboard from './components/Dashboard';
+import Finder from './components/Finder';
+import KnowledgeGraph from './components/KnowledgeGraph';
+import AgentView from './components/AgentView';
+import Timeline from './components/Timeline';
+import SmartLibrary from './components/SmartLibrary';
+import Settings from './components/Settings';
+import { MOCK_GRAPH_DATA, MOCK_USER } from './constants';
+import { ViewMode, User, UserSubscription } from './types';
 
-function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+const App: React.FC = () => {
+  const [currentView, setCurrentView] = useState<ViewMode>(ViewMode.DASHBOARD);
+  // Start with no user to demonstrate login flow
+  const [user, setUser] = useState<User | null>(null);
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
-  }
+  const handleLogin = (email: string) => {
+    // Simulate login
+    setUser({ ...MOCK_USER, email });
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+  };
+
+  const handleUpdateSubscription = (sub: UserSubscription) => {
+    if (user) {
+      setUser({ ...user, subscription: sub });
+    }
+  };
+
+  const renderView = () => {
+    switch (currentView) {
+      case ViewMode.DASHBOARD:
+        return <Dashboard />;
+      case ViewMode.LIBRARY:
+        return <SmartLibrary />;
+      case ViewMode.FINDER:
+        return <Finder />;
+      case ViewMode.GRAPH:
+        return <KnowledgeGraph data={MOCK_GRAPH_DATA} />;
+      case ViewMode.TIMELINE:
+        return <Timeline />;
+      case ViewMode.AGENT:
+        return <AgentView />;
+      case ViewMode.SETTINGS:
+        return <Settings 
+          user={user} 
+          onLogin={handleLogin} 
+          onLogout={handleLogout}
+          onUpdateSubscription={handleUpdateSubscription}
+        />;
+      default:
+        return <Dashboard />;
+    }
+  };
 
   return (
-    <main className="container">
-      <h1>Welcome to Tauri + React</h1>
-
-      <div className="row">
-        <a href="https://vite.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
-    </main>
+    <div className="flex h-screen bg-nexus-950 text-gray-100 font-sans overflow-hidden">
+      <Sidebar 
+        currentView={currentView} 
+        onViewChange={setCurrentView} 
+        user={user}
+      />
+      <main className="flex-1 h-full relative overflow-hidden">
+        {renderView()}
+      </main>
+    </div>
   );
-}
+};
 
 export default App;
