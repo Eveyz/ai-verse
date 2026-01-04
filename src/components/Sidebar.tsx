@@ -1,5 +1,6 @@
 import React from 'react';
 import { ViewMode, User } from '../types';
+import { useLanguage } from '../contexts/LanguageContext';
 import { 
   LayoutGrid, 
   Search, 
@@ -9,8 +10,7 @@ import {
   FolderOpen,
   History,
   Library,
-  User as UserIcon,
-  LogOut
+  User as UserIcon
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -20,13 +20,15 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange, user }) => {
+  const { t } = useLanguage();
+
   const navItems = [
-    { id: ViewMode.DASHBOARD, icon: LayoutGrid, label: 'Dashboard' },
-    { id: ViewMode.LIBRARY, icon: Library, label: 'Smart Library' },
-    { id: ViewMode.FINDER, icon: Search, label: 'Finder' },
-    { id: ViewMode.GRAPH, icon: Network, label: 'Knowledge Graph' },
-    { id: ViewMode.TIMELINE, icon: History, label: 'Evolution' },
-    { id: ViewMode.AGENT, icon: Bot, label: 'Agent Workflow' },
+    { id: ViewMode.DASHBOARD, icon: LayoutGrid, label: t('nav.dashboard') },
+    { id: ViewMode.LIBRARY, icon: Library, label: t('nav.library') },
+    { id: ViewMode.FINDER, icon: Search, label: t('nav.finder') },
+    { id: ViewMode.GRAPH, icon: Network, label: t('nav.graph') },
+    { id: ViewMode.TIMELINE, icon: History, label: t('nav.timeline') },
+    { id: ViewMode.AGENT, icon: Bot, label: t('nav.agent') },
   ];
 
   return (
@@ -63,7 +65,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange, user }) =>
         {/* L1 Feature Hint: File System Integration */}
         <div className="mt-8 px-4 hidden md:block">
           <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-            Local Sources
+            {t('nav.localSources')}
           </div>
           <div className="space-y-1">
              <div className="flex items-center text-sm text-gray-400 p-2 rounded hover:bg-nexus-800 cursor-pointer">
@@ -85,7 +87,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange, user }) =>
             className={`w-full flex items-center p-2 md:px-4 md:py-3 rounded-lg text-gray-400 hover:bg-nexus-800/50 hover:text-gray-200 ${currentView === ViewMode.SETTINGS ? 'bg-nexus-800 text-white' : ''}`}
           >
             <Settings size={20} />
-            <span className="ml-3 font-medium hidden md:block">Settings</span>
+            <span className="ml-3 font-medium hidden md:block">{t('nav.settings')}</span>
           </button>
         </div>
 
@@ -107,7 +109,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange, user }) =>
                 className="w-full flex items-center justify-center p-2 rounded-lg border border-dashed border-gray-600 text-gray-400 hover:text-white hover:border-nexus-accent hover:bg-nexus-800/30 transition-all"
              >
                 <UserIcon size={16} className="mr-2" />
-                <span className="text-xs">Sign In</span>
+                <span className="text-xs">{t('nav.signIn')}</span>
              </button>
            )}
         </div>

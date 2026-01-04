@@ -7,10 +7,11 @@ import AgentView from './components/AgentView';
 import Timeline from './components/Timeline';
 import SmartLibrary from './components/SmartLibrary';
 import Settings from './components/Settings';
-import { MOCK_GRAPH_DATA, MOCK_USER } from './constants';
 import { ViewMode, User, UserSubscription } from './types';
+import { MOCK_GRAPH_DATA, MOCK_USER } from './constants';
+import { LanguageProvider } from './contexts/LanguageContext';
 
-const App: React.FC = () => {
+const AppContent: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewMode>(ViewMode.DASHBOARD);
   // Start with no user to demonstrate login flow
   const [user, setUser] = useState<User | null>(null);
@@ -67,6 +68,14 @@ const App: React.FC = () => {
         {renderView()}
       </main>
     </div>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
   );
 };
 

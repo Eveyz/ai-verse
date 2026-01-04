@@ -1,6 +1,7 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { Database, FileText, Share2, Layers } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const data = [
   { name: 'Mon', files: 400, chunks: 2400 },
@@ -24,23 +25,25 @@ const StatCard = ({ label, value, icon: Icon, color }: any) => (
 );
 
 const Dashboard: React.FC = () => {
+  const { t } = useLanguage();
+
   return (
     <div className="p-8 max-w-7xl mx-auto h-full overflow-y-auto">
       <header className="mb-8">
-        <h1 className="text-3xl font-bold text-white">Knowledge Base Overview</h1>
-        <p className="text-gray-400 mt-2">Local index status and evolution metrics.</p>
+        <h1 className="text-3xl font-bold text-white">{t('dashboard.title')}</h1>
+        <p className="text-gray-400 mt-2">{t('dashboard.subtitle')}</p>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <StatCard label="Indexed Files" value="12,403" icon={FileText} color="text-blue-500" />
-        <StatCard label="Vector Chunks" value="1.2M" icon={Database} color="text-purple-500" />
-        <StatCard label="Semantic Links" value="84,392" icon={Share2} color="text-nexus-accent" />
-        <StatCard label="Knowledge Depth" value="L3" icon={Layers} color="text-emerald-500" />
+        <StatCard label={t('dashboard.indexedFiles')} value="12,403" icon={FileText} color="text-blue-500" />
+        <StatCard label={t('dashboard.vectorChunks')} value="1.2M" icon={Database} color="text-purple-500" />
+        <StatCard label={t('dashboard.semanticLinks')} value="84,392" icon={Share2} color="text-nexus-accent" />
+        <StatCard label={t('dashboard.knowledgeDepth')} value="L3" icon={Layers} color="text-emerald-500" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 bg-nexus-900 border border-nexus-border p-6 rounded-xl">
-          <h3 className="text-lg font-semibold text-white mb-6">Ingestion Velocity</h3>
+          <h3 className="text-lg font-semibold text-white mb-6">{t('dashboard.ingestionVelocity')}</h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data}>
@@ -58,11 +61,11 @@ const Dashboard: React.FC = () => {
         </div>
 
         <div className="bg-nexus-900 border border-nexus-border p-6 rounded-xl">
-          <h3 className="text-lg font-semibold text-white mb-4">System Health</h3>
+          <h3 className="text-lg font-semibold text-white mb-4">{t('dashboard.systemHealth')}</h3>
           <div className="space-y-4">
              <div>
                 <div className="flex justify-between text-sm mb-1">
-                   <span className="text-gray-400">Vector Store (Local)</span>
+                   <span className="text-gray-400">{t('dashboard.vectorStore')}</span>
                    <span className="text-white">1.2 GB / 50 GB</span>
                 </div>
                 <div className="w-full bg-nexus-950 rounded-full h-2">
@@ -71,7 +74,7 @@ const Dashboard: React.FC = () => {
              </div>
              <div>
                 <div className="flex justify-between text-sm mb-1">
-                   <span className="text-gray-400">Memory Usage (Rust Worker)</span>
+                   <span className="text-gray-400">{t('dashboard.memoryUsage')}</span>
                    <span className="text-white">450 MB</span>
                 </div>
                 <div className="w-full bg-nexus-950 rounded-full h-2">
@@ -80,7 +83,7 @@ const Dashboard: React.FC = () => {
              </div>
              <div>
                 <div className="flex justify-between text-sm mb-1">
-                   <span className="text-gray-400">Embedding Queue</span>
+                   <span className="text-gray-400">{t('dashboard.queue')}</span>
                    <span className="text-white">Idle</span>
                 </div>
                 <div className="w-full bg-nexus-950 rounded-full h-2">
@@ -90,7 +93,7 @@ const Dashboard: React.FC = () => {
           </div>
           
           <div className="mt-8 pt-6 border-t border-nexus-border">
-             <div className="text-sm font-semibold text-gray-300 mb-2">Active Plugins</div>
+             <div className="text-sm font-semibold text-gray-300 mb-2">{t('dashboard.activePlugins')}</div>
              <div className="flex flex-wrap gap-2">
                 <span className="px-2 py-1 bg-nexus-800 text-xs text-gray-400 rounded border border-nexus-border">Parsers: PDF, MD</span>
                 <span className="px-2 py-1 bg-nexus-800 text-xs text-gray-400 rounded border border-nexus-border">Model: Gemini Flash</span>

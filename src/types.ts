@@ -8,6 +8,8 @@ export enum ViewMode {
   SETTINGS = 'SETTINGS'
 }
 
+export type Language = 'en' | 'zh';
+
 export interface Node {
   id: string;
   label: string;

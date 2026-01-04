@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 import { 
   Server, 
   Cpu, 
@@ -20,10 +21,11 @@ import {
   ArrowRight,
   Network,
   RefreshCw,
-  Link as LinkIcon
+  Link as LinkIcon,
+  Globe
 } from 'lucide-react';
 import { MOCK_MODELS } from '../constants';
-import { AIModel, ComputeMode, User, UserSubscription, LocalProvider } from '../types';
+import { AIModel, ComputeMode, User, UserSubscription, LocalProvider, Language } from '../types';
 
 interface SettingsProps {
   user: User | null;
@@ -33,6 +35,7 @@ interface SettingsProps {
 }
 
 const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSubscription }) => {
+  const { t, language, setLanguage } = useLanguage();
   const [computeMode, setComputeMode] = useState<ComputeMode>('local');
   const [localProvider, setLocalProvider] = useState<LocalProvider>('native');
   
@@ -132,25 +135,40 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
 
   return (
     <div className="max-w-5xl mx-auto p-8 h-full overflow-y-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white mb-2">Settings</h1>
-        <p className="text-gray-400">Manage your account, subscription, and AI inference engine.</p>
+      <div className="mb-8 flex items-start justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-white mb-2">{t('settings.title')}</h1>
+          <p className="text-gray-400">{t('settings.subtitle')}</p>
+        </div>
+        
+        {/* Language Switcher */}
+        <div className="flex items-center gap-2 bg-nexus-900 border border-nexus-border rounded-lg p-1">
+            <Globe size={16} className="ml-2 text-gray-500" />
+            <select 
+                value={language} 
+                onChange={(e) => setLanguage(e.target.value as Language)}
+                className="bg-transparent text-sm text-white p-2 outline-none cursor-pointer"
+            >
+                <option value="en">English</option>
+                <option value="zh">中文 (简体)</option>
+            </select>
+        </div>
       </div>
 
       {/* ACCOUNT SECTION */}
       <div className="mb-10 animate-in fade-in slide-in-from-top-2 duration-500">
          <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2">
-            <UserIcon size={16} /> Account Management
+            <UserIcon size={16} /> {t('settings.account')}
          </h2>
          
          {!user ? (
              <div className="bg-nexus-900 border border-nexus-border rounded-xl p-8 flex flex-col md:flex-row gap-8 items-center">
                  <div className="flex-1">
-                     <h3 className="text-2xl font-bold text-white mb-2">Sign in to Nexus</h3>
-                     <p className="text-gray-400 mb-6">Sync your settings, manage your subscription, and access cloud models.</p>
+                     <h3 className="text-2xl font-bold text-white mb-2">{t('settings.signInTitle')}</h3>
+                     <p className="text-gray-400 mb-6">{t('settings.signInDesc')}</p>
                      <form onSubmit={handleLoginSubmit} className="space-y-4 max-w-md">
                          <div>
-                             <label className="block text-xs text-gray-500 mb-1">Email Address</label>
+                             <label className="block text-xs text-gray-500 mb-1">{t('settings.email')}</label>
                              <div className="relative">
                                  <Mail size={16} className="absolute left-3 top-3 text-gray-500" />
                                  <input 
@@ -164,7 +182,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                              </div>
                          </div>
                          <div>
-                             <label className="block text-xs text-gray-500 mb-1">Password</label>
+                             <label className="block text-xs text-gray-500 mb-1">{t('settings.password')}</label>
                              <div className="relative">
                                  <Lock size={16} className="absolute left-3 top-3 text-gray-500" />
                                  <input 
@@ -178,17 +196,16 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                              </div>
                          </div>
                          <button type="submit" className="w-full bg-nexus-accent hover:bg-violet-600 text-white font-medium py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2">
-                             Sign In <ArrowRight size={16} />
+                             {t('nav.signIn')} <ArrowRight size={16} />
                          </button>
                      </form>
                  </div>
                  <div className="hidden md:block w-px h-48 bg-nexus-border"></div>
                  <div className="flex-1 text-center md:text-left">
                      <Shield size={48} className="text-nexus-accent mb-4 mx-auto md:mx-0" />
-                     <h4 className="text-lg font-bold text-white mb-2">Privacy First</h4>
+                     <h4 className="text-lg font-bold text-white mb-2">{t('settings.privacyTitle')}</h4>
                      <p className="text-sm text-gray-400">
-                         Even when logged in, your local files and local model embeddings 
-                         <span className="text-white font-semibold"> never leave your device</span> unless you explicitly use Cloud Mode.
+                         {t('settings.privacyDesc')}
                      </p>
                  </div>
              </div>
@@ -207,11 +224,11 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                              </span>
                              {user.subscription.status === 'active' ? (
                                  <span className="text-xs bg-green-900/30 text-green-400 border border-green-900/50 px-2 py-0.5 rounded flex items-center">
-                                     <Zap size={10} className="mr-1" /> {user.subscription.plan.toUpperCase()} Plan
+                                     <Zap size={10} className="mr-1" /> {t('settings.planActive')}
                                  </span>
                              ) : (
                                  <span className="text-xs bg-red-900/30 text-red-400 border border-red-900/50 px-2 py-0.5 rounded flex items-center">
-                                     <AlertCircle size={10} className="mr-1" /> Plan Expired
+                                     <AlertCircle size={10} className="mr-1" /> {t('settings.planExpired')}
                                  </span>
                              )}
                          </div>
@@ -219,13 +236,13 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                  </div>
                  <div className="flex gap-3">
                      <button className="px-4 py-2 bg-nexus-950 border border-nexus-border text-gray-300 rounded-lg hover:bg-nexus-800 transition-colors">
-                         Billing Portal
+                         {t('settings.billing')}
                      </button>
                      <button 
                         onClick={onLogout}
                         className="px-4 py-2 bg-red-900/10 border border-red-900/30 text-red-400 rounded-lg hover:bg-red-900/30 transition-colors flex items-center gap-2"
                      >
-                         <LogOut size={16} /> Sign Out
+                         <LogOut size={16} /> {t('settings.signOut')}
                      </button>
                  </div>
              </div>
@@ -236,7 +253,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
 
       {/* ENGINE CONFIGURATION */}
       <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2">
-        <Cpu size={16} /> Inference Engine
+        <Cpu size={16} /> {t('settings.inferenceEngine')}
       </h2>
 
       {/* Mode Switcher */}
@@ -247,8 +264,8 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
         >
             <Cpu size={20} className={computeMode === 'local' ? 'text-nexus-accent' : ''} />
             <div className="text-left">
-                <div className="font-bold">Local Mode (Free)</div>
-                <div className="text-xs opacity-70">Offline, Privacy-first, Runs on your hardware</div>
+                <div className="font-bold">{t('settings.localMode')}</div>
+                <div className="text-xs opacity-70">{t('settings.localModeDesc')}</div>
             </div>
         </button>
         <button 
@@ -264,10 +281,10 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
             <Cloud size={20} className={computeMode === 'cloud' ? 'text-blue-400' : ''} />
              <div className="text-left">
                 <div className="font-bold flex items-center gap-2">
-                    Cloud Mode (Paid)
+                    {t('settings.cloudMode')}
                     {!user && <Lock size={12} />}
                 </div>
-                <div className="text-xs opacity-70">High Performance, Multi-model, Requires API Key</div>
+                <div className="text-xs opacity-70">{t('settings.cloudModeDesc')}</div>
             </div>
         </button>
       </div>
@@ -282,13 +299,13 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                    onClick={() => setLocalProvider('native')}
                    className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${localProvider === 'native' ? 'border-nexus-accent text-nexus-accent' : 'border-transparent text-gray-500 hover:text-gray-300'}`}
                 >
-                   <span className="flex items-center gap-2"><HardDrive size={14}/> Built-in Engine</span>
+                   <span className="flex items-center gap-2"><HardDrive size={14}/> {t('settings.builtinEngine')}</span>
                 </button>
                 <button 
                    onClick={() => setLocalProvider('ollama')}
                    className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${localProvider === 'ollama' ? 'border-nexus-accent text-nexus-accent' : 'border-transparent text-gray-500 hover:text-gray-300'}`}
                 >
-                   <span className="flex items-center gap-2"><Network size={14}/> External Endpoint (Ollama/LM Studio)</span>
+                   <span className="flex items-center gap-2"><Network size={14}/> {t('settings.externalEndpoint')}</span>
                 </button>
              </div>
 
@@ -302,12 +319,12 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                                 <HardDrive size={24} className="text-nexus-accent" />
                             </div>
                             <div>
-                                <div className="text-white font-semibold">Local Model Storage</div>
-                                <div className="text-sm text-gray-500">Using {formatSize(getDiskUsage())} of available space</div>
+                                <div className="text-white font-semibold">{t('settings.localStorage')}</div>
+                                <div className="text-sm text-gray-500">{t('settings.using')} {formatSize(getDiskUsage())} {t('settings.available')}</div>
                             </div>
                         </div>
                         <div className="text-right">
-                            <div className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-1">Recommended Specs</div>
+                            <div className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-1">{t('settings.recommended')}</div>
                             <div className="text-sm text-gray-300">16GB RAM + GPU (Metal/CUDA)</div>
                         </div>
                     </div>
@@ -315,7 +332,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                     {/* LLM Section */}
                     <div>
                         <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
-                            <Activity size={16} /> Large Language Models
+                            <Activity size={16} /> {t('settings.llm')}
                         </h3>
                         <div className="space-y-3">
                             {models.filter(m => m.provider === 'Local' && m.family === 'LLM').map(model => (
@@ -326,6 +343,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                                     onSelect={() => setSelectedLocalLLM(model.id)}
                                     onDownload={() => handleDownload(model.id)}
                                     onDelete={() => handleDelete(model.id)}
+                                    t={t}
                                 />
                             ))}
                         </div>
@@ -334,7 +352,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                     {/* Embeddings Section */}
                     <div>
                         <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
-                            <Server size={16} /> Embedding Models
+                            <Server size={16} /> {t('settings.embedding')}
                         </h3>
                         <div className="space-y-3">
                             {models.filter(m => m.provider === 'Local' && m.family === 'Embedding').map(model => (
@@ -345,6 +363,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                                     onSelect={() => setSelectedLocalEmbed(model.id)}
                                     onDownload={() => handleDownload(model.id)}
                                     onDelete={() => handleDelete(model.id)}
+                                    t={t}
                                 />
                             ))}
                         </div>
@@ -358,8 +377,8 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                      <div className="bg-nexus-900 border border-nexus-border rounded-xl p-6">
                          <div className="flex items-start justify-between">
                              <div>
-                                 <h3 className="text-lg font-bold text-white mb-1">Custom Inference Endpoint</h3>
-                                 <p className="text-sm text-gray-400">Connect to an existing local inference server like Ollama, LMStudio, or LocalAI.</p>
+                                 <h3 className="text-lg font-bold text-white mb-1">{t('settings.customEndpoint')}</h3>
+                                 <p className="text-sm text-gray-400">{t('settings.customEndpointDesc')}</p>
                              </div>
                              <div className={`px-3 py-1 rounded-full text-xs font-bold border flex items-center gap-2 ${connectionStatus === 'connected' ? 'bg-green-900/30 text-green-400 border-green-900/50' : 'bg-gray-800 text-gray-500 border-gray-700'}`}>
                                  <div className={`w-2 h-2 rounded-full ${connectionStatus === 'connected' ? 'bg-green-400' : 'bg-gray-500'}`}></div>
@@ -383,7 +402,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                                  className="px-6 py-2 bg-nexus-800 hover:bg-nexus-700 text-white rounded-lg border border-nexus-border transition-colors flex items-center gap-2 disabled:opacity-50"
                              >
                                  {isConnecting ? <RefreshCw className="animate-spin" size={16}/> : <RefreshCw size={16}/>}
-                                 {isConnecting ? 'Checking...' : 'Connect & Scan'}
+                                 {isConnecting ? 'Checking...' : t('settings.connectScan')}
                              </button>
                          </div>
                      </div>
@@ -391,11 +410,11 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                      {connectionStatus === 'connected' && (
                          <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
                              <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
-                                <Network size={16} /> Discovered Models
+                                <Network size={16} /> {t('settings.discoveredModels')}
                              </h3>
                              <div className="space-y-3">
                                  {externalModels.length === 0 ? (
-                                     <div className="text-gray-500 italic p-4 text-center">No models found at this endpoint.</div>
+                                     <div className="text-gray-500 italic p-4 text-center">{t('settings.noModels')}</div>
                                  ) : (
                                      externalModels.map(model => (
                                         <div key={model.id} className={`flex items-center justify-between p-4 rounded-xl border transition-all ${selectedExternalLLM === model.id ? 'bg-nexus-800 border-nexus-accent shadow-lg shadow-nexus-accent/10' : 'bg-nexus-900 border-nexus-border hover:border-gray-600'}`}>
@@ -415,7 +434,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                                                 </div>
                                             </div>
                                             <div className="text-green-500 text-xs flex items-center">
-                                                <CheckCircle size={14} className="mr-1"/> Ready
+                                                <CheckCircle size={14} className="mr-1"/> {t('settings.ready')}
                                             </div>
                                         </div>
                                      ))
@@ -439,7 +458,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                             <Shield className="text-green-400" size={24} />
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold text-white">Pro Membership Active</h3>
+                            <h3 className="text-xl font-bold text-white">{t('settings.planActive')}</h3>
                             <p className="text-green-200/70 text-sm">Valid until {user.subscription.expiryDate}</p>
                         </div>
                      </div>
@@ -451,7 +470,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                 <div className="bg-red-900/20 border border-red-500/50 p-6 rounded-xl animate-pulse">
                      <div className="flex items-center gap-4 mb-2">
                         <AlertCircle className="text-red-500" size={24} />
-                        <h3 className="text-xl font-bold text-red-100">Subscription Expired</h3>
+                        <h3 className="text-xl font-bold text-red-100">{t('settings.planExpired')}</h3>
                      </div>
                      <p className="text-red-200/70 mb-4 ml-10">Your Cloud Mode access expired on {user.subscription.expiryDate}. Renew now to regain access to premium models.</p>
                      
@@ -459,9 +478,9 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ml-10 mt-6">
                         {/* Pro Plan */}
                         <div className="bg-nexus-950 border border-nexus-border p-4 rounded-xl relative overflow-hidden group hover:border-nexus-accent transition-all">
-                            <div className="absolute top-0 right-0 bg-nexus-accent text-white text-[10px] font-bold px-2 py-1 rounded-bl">POPULAR</div>
-                            <h4 className="text-lg font-bold text-white mb-1">Pro Plan</h4>
-                            <div className="text-2xl font-bold text-white mb-4">$20<span className="text-sm text-gray-500 font-normal">/mo</span></div>
+                            <div className="absolute top-0 right-0 bg-nexus-accent text-white text-[10px] font-bold px-2 py-1 rounded-bl">{t('settings.popular')}</div>
+                            <h4 className="text-lg font-bold text-white mb-1">{t('settings.proPlan')}</h4>
+                            <div className="text-2xl font-bold text-white mb-4">$20<span className="text-sm text-gray-500 font-normal">{t('settings.month')}</span></div>
                             <ul className="text-sm text-gray-400 space-y-2 mb-6">
                                 <li className="flex items-center"><CheckCircle size={12} className="mr-2 text-nexus-accent"/> Access to Gemini Pro</li>
                                 <li className="flex items-center"><CheckCircle size={12} className="mr-2 text-nexus-accent"/> Unlimited Cloud Embeddings</li>
@@ -471,14 +490,14 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                                 onClick={() => handleRenew('pro')}
                                 className="w-full py-2 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2"
                             >
-                                <Zap size={16} /> Renew Pro
+                                <Zap size={16} /> {t('settings.renew')}
                             </button>
                         </div>
 
                         {/* Enterprise Plan */}
                          <div className="bg-nexus-950 border border-nexus-border p-4 rounded-xl group hover:border-blue-400 transition-all">
-                            <h4 className="text-lg font-bold text-white mb-1">Enterprise</h4>
-                            <div className="text-2xl font-bold text-white mb-4">$50<span className="text-sm text-gray-500 font-normal">/mo</span></div>
+                            <h4 className="text-lg font-bold text-white mb-1">{t('settings.enterprisePlan')}</h4>
+                            <div className="text-2xl font-bold text-white mb-4">$50<span className="text-sm text-gray-500 font-normal">{t('settings.month')}</span></div>
                              <ul className="text-sm text-gray-400 space-y-2 mb-6">
                                 <li className="flex items-center"><CheckCircle size={12} className="mr-2 text-blue-400"/> All Pro Features</li>
                                 <li className="flex items-center"><CheckCircle size={12} className="mr-2 text-blue-400"/> GPT-4o Access</li>
@@ -488,7 +507,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                                 onClick={() => handleRenew('enterprise')}
                                 className="w-full py-2 bg-nexus-800 text-white font-bold rounded-lg hover:bg-nexus-700 transition-colors flex items-center justify-center gap-2"
                             >
-                                <CreditCard size={16} /> Renew Enterprise
+                                <CreditCard size={16} /> {t('settings.renew')}
                             </button>
                         </div>
                      </div>
@@ -497,7 +516,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
 
             <div className={`bg-nexus-900 border border-nexus-border rounded-xl p-6 transition-opacity ${user.subscription.status !== 'active' ? 'opacity-50 pointer-events-none grayscale' : ''}`}>
                 <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-lg font-bold text-white">Model Configuration</h3>
+                    <h3 className="text-lg font-bold text-white">{t('settings.modelConfig')}</h3>
                     {user.subscription.status !== 'active' && <Lock className="text-gray-500" />}
                 </div>
                 
@@ -512,7 +531,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-xs text-gray-500 mb-1">Chat Model</label>
+                                <label className="block text-xs text-gray-500 mb-1">{t('settings.chatModel')}</label>
                                 <select 
                                     className="w-full bg-nexus-900 border border-nexus-border rounded p-2 text-sm text-white focus:border-nexus-accent outline-none"
                                     value={selectedCloudLLM}
@@ -524,7 +543,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-xs text-gray-500 mb-1">API Key</label>
+                                <label className="block text-xs text-gray-500 mb-1">{t('settings.apiKey')}</label>
                                 <div className="relative">
                                     <input type="password" value="************************" disabled className="w-full bg-nexus-900 border border-nexus-border rounded p-2 text-sm text-gray-500" />
                                     <Key size={14} className="absolute right-3 top-3 text-gray-500" />
@@ -557,8 +576,9 @@ const ModelRow: React.FC<{
     isActive: boolean, 
     onSelect: () => void,
     onDownload: () => void,
-    onDelete: () => void
-}> = ({ model, isActive, onSelect, onDownload, onDelete }) => {
+    onDelete: () => void,
+    t: (key: string) => string
+}> = ({ model, isActive, onSelect, onDownload, onDelete, t }) => {
     const isDownloaded = model.status === 'downloaded' || model.status === 'active';
     const isDownloading = model.status === 'downloading';
 
@@ -596,7 +616,7 @@ const ModelRow: React.FC<{
                     <>
                         <div className="flex items-center text-xs text-green-500">
                              <CheckCircle size={14} className="mr-1" />
-                             Ready
+                             {t('settings.ready')}
                         </div>
                         <button onClick={onDelete} className="p-2 text-gray-500 hover:text-red-400 hover:bg-red-900/20 rounded transition-colors" title="Delete Model">
                             <Trash2 size={16} />
@@ -608,7 +628,7 @@ const ModelRow: React.FC<{
                         className="flex items-center gap-2 px-3 py-1.5 bg-nexus-800 hover:bg-nexus-700 text-gray-200 text-xs rounded border border-nexus-border transition-all"
                     >
                         <Download size={14} />
-                        Download
+                        {t('settings.download')}
                     </button>
                 )}
             </div>
