@@ -1,51 +1,47 @@
+// src-tauri/src/llm.rs
 use anyhow::Result;
-use async_trait::async_trait;
 use serde_json::json;
 
-/// The common interface for ANY AI provider (Ollama, Gemini, OpenAI)
-#[async_trait]
-pub trait LLMBackend: Send + Sync {
-    async fn generate(&self, system: &str, prompt: &str) -> Result<String>;
+// FIX: Use Enum instead of Trait for easier State management
+#[derive(Clone)]
+pub enum LLMBackend {
+    Ollama { base_url: String, model: String },
+    // You can add Gemini later:
+    // Gemini { api_key: String }
 }
 
-/// Implementation for Local Ollama
-pub struct Ollama {
-    pub base_url: String,
-    pub model: String,
-}
-
-impl Ollama {
-    pub fn new(model: &str) -> Self {
-        Self {
+impl LLMBackend {
+    pub fn new_ollama(model: &str) -> Self {
+        Self::Ollama {
             base_url: "http://localhost:11434".to_string(),
             model: model.to_string(),
         }
     }
-}
 
-#[async_trait]
-impl LLMBackend for Ollama {
-    async fn generate(&self, system: &str, prompt: &str) -> Result<String> {
-        let client = reqwest::Client::new();
-        let url = format!("{}/api/generate", self.base_url);
+    pub async fn generate(&self, system: &str, prompt: &str) -> Result<String> {
+        match self {
+            LLMBackend::Ollama { base_url, model } => {
+                let client = reqwest::Client::new();
+                let url = format!("{}/api/generate", base_url);
 
-        let res = client.post(url)
-            .json(&json!({
-                "model": self.model,
-                "prompt": format!("System: {}\nUser: {}", system, prompt),
-                "stream": false
-            }))
-            .send()
-            .await?
-            .json::<serde_json::Value>()
-            .await?;
+                let res = client.post(url)
+                    .json(&json!({
+                        "model": model,
+                        "prompt": format!("System: {}\nUser: {}", system, prompt),
+                        "stream": false
+                    }))
+                    .send()
+                    .await?
+                    .json::<serde_json::Value>()
+                    .await?;
 
-        // Extract 'response' field from Ollama JSON
-        let text = res["response"]
-            .as_str()
-            .ok_or_else(|| anyhow::anyhow!("Invalid response from Ollama"))?
-            .to_string();
+                let text = res["response"]
+                    .as_str()
+                    .ok_or_else(|| anyhow::anyhow!("Invalid response"))?
+                    .to_string();
 
-        Ok(text)
+                Ok(text)
+            }
+        }
     }
 }
