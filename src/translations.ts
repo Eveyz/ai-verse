@@ -29,6 +29,67 @@ export const translations: Translations = {
       queue: "Embedding Queue",
       activePlugins: "Active Plugins"
     },
+    finder: {
+      title: "Nexus Finder",
+      subtitle: "Semantic search across your entire local filesystem.",
+      placeholder: "Ask about architecture, variables, or concepts...",
+      topHits: "Top Hits",
+      match: "match",
+      recentFiles: "Recent Files",
+      recentFilesDesc: "Resume working where you left off",
+      topics: "Topics",
+      topicsDesc: "Explore by concept clusters"
+    },
+    graph: {
+      topology: "Knowledge Topology",
+      stats: "Visualizing 1,204 nodes • 3.4k relations",
+      legend: {
+        concept: "Concept",
+        file: "File",
+        entity: "Entity"
+      },
+      foundIn: "Found in 12 documents. First indexed 3 months ago.",
+      connectedEntities: "Connected Entities",
+      actions: "Actions",
+      showTimeline: "Show Evolution Timeline",
+      startChat: "Start Chat from Node"
+    },
+    agent: {
+      initialMessage: "I am ready. I have indexed your local documents, codebases, and notes. I can help you synthesize documents or find contradictions across versions.",
+      me: "ME",
+      sources: "Sources",
+      synthesizing: "Synthesizing knowledge graph...",
+      placeholder: "Message your Knowledge Base...",
+      workflowTitle: "Active Workflow",
+      synthesisTitle: "Knowledge Synthesis",
+      synthesisDesc: "Nexus doesn't just answer questions. Ask it to \"Draft a PRD based on these docs\" or \"Find contradictions between v1 and v2\" to see the artifact panel in action.",
+      draft: "Draft"
+    },
+    timeline: {
+      title: "Evolution",
+      subtitle: "Tracking concept drift and knowledge milestones.",
+      generateReport: "Generate Monthly Report",
+      generating: "Synthesizing...",
+      reportTitle: "Monthly Insight",
+      closeReport: "Close Report",
+      eventId: "Event ID",
+      description: "Description",
+      previously: "Previously",
+      evolvedTo: "Evolved To",
+      impactedFiles: "Impacted Files",
+      selectEvent: "Select an event from the timeline to view details"
+    },
+    library: {
+      title: "Smart Library",
+      subtitle: "Dump your files here. We organize them for you.",
+      grid: "Grid",
+      type: "Type",
+      time: "Time",
+      smart: "Smart",
+      dropMain: "Drop files to auto-index",
+      dropSub: "Supports PDF, MD, Code, Images",
+      uploaded: "Demo: Files 'uploaded' successfully!"
+    },
     settings: {
       title: "Settings",
       subtitle: "Manage your account, subscription, and AI inference engine.",
@@ -99,6 +160,67 @@ export const translations: Translations = {
       memoryUsage: "内存占用",
       queue: "嵌入队列",
       activePlugins: "已启用插件"
+    },
+    finder: {
+      title: "Nexus 搜索",
+      subtitle: "全文件系统语义搜索",
+      placeholder: "询问关于架构、变量或概念的问题...",
+      topHits: "最佳匹配",
+      match: "匹配度",
+      recentFiles: "最近文件",
+      recentFilesDesc: "继续您上次的工作",
+      topics: "主题",
+      topicsDesc: "按概念聚类探索"
+    },
+    graph: {
+      topology: "知识拓扑",
+      stats: "可视化 1,204 个节点 • 3.4k 关系",
+      legend: {
+        concept: "概念",
+        file: "文件",
+        entity: "实体"
+      },
+      foundIn: "发现于 12 个文档中。首次索引于 3 个月前。",
+      connectedEntities: "相关实体",
+      actions: "操作",
+      showTimeline: "显示演化时间轴",
+      startChat: "从节点开始对话"
+    },
+    agent: {
+      initialMessage: "准备就绪。我已索引您的本地文档、代码库和笔记。我可以帮助您综合文档信息或查找版本间的矛盾。",
+      me: "我",
+      sources: "来源",
+      synthesizing: "正在综合知识图谱...",
+      placeholder: "向您的知识库提问...",
+      workflowTitle: "活跃工作流",
+      synthesisTitle: "知识综合",
+      synthesisDesc: "Nexus 不仅仅回答问题。试着让它“基于这些文档起草 PRD”或“查找 v1 和 v2 之间的矛盾”来查看工件面板的实际效果。",
+      draft: "草稿"
+    },
+    timeline: {
+      title: "演化",
+      subtitle: "追踪概念漂移和知识里程碑",
+      generateReport: "生成月度报告",
+      generating: "正在综合...",
+      reportTitle: "月度洞察",
+      closeReport: "关闭报告",
+      eventId: "事件 ID",
+      description: "描述",
+      previously: "变更前",
+      evolvedTo: "演化为",
+      impactedFiles: "受影响文件",
+      selectEvent: "从时间轴选择事件以查看详情"
+    },
+    library: {
+      title: "智能资料库",
+      subtitle: "将文件拖入此处，我们将为您自动整理。",
+      grid: "网格",
+      type: "类型",
+      time: "时间",
+      smart: "智能",
+      dropMain: "拖放文件以自动索引",
+      dropSub: "支持 PDF, MD, Code, Images",
+      uploaded: "演示：文件“上传”成功！"
     },
     settings: {
       title: "设置",

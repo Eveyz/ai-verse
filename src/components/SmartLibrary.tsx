@@ -14,10 +14,12 @@ import {
   UploadCloud,
   FolderOpen
 } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 type GroupMode = 'none' | 'type' | 'time' | 'semantic';
 
 const SmartLibrary: React.FC = () => {
+  const { t } = useLanguage();
   const [groupMode, setGroupMode] = useState<GroupMode>('semantic');
   const [isDragging, setIsDragging] = useState(false);
 
@@ -59,8 +61,8 @@ const SmartLibrary: React.FC = () => {
       {/* Header & Controls */}
       <div className="p-8 border-b border-nexus-border flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-1">Smart Library</h1>
-          <p className="text-gray-400 text-sm">Dump your files here. We organize them for you.</p>
+          <h1 className="text-3xl font-bold text-white mb-1">{t('library.title')}</h1>
+          <p className="text-gray-400 text-sm">{t('library.subtitle')}</p>
         </div>
 
         <div className="flex bg-nexus-900 p-1 rounded-lg border border-nexus-border">
@@ -69,28 +71,28 @@ const SmartLibrary: React.FC = () => {
             className={`flex items-center px-3 py-1.5 rounded-md text-sm transition-all ${groupMode === 'none' ? 'bg-nexus-800 text-white shadow' : 'text-gray-500 hover:text-gray-300'}`}
           >
             <Grid size={14} className="mr-2" />
-            Grid
+            {t('library.grid')}
           </button>
           <button 
             onClick={() => setGroupMode('type')}
             className={`flex items-center px-3 py-1.5 rounded-md text-sm transition-all ${groupMode === 'type' ? 'bg-nexus-800 text-white shadow' : 'text-gray-500 hover:text-gray-300'}`}
           >
             <Box size={14} className="mr-2" />
-            Type
+            {t('library.type')}
           </button>
           <button 
             onClick={() => setGroupMode('time')}
             className={`flex items-center px-3 py-1.5 rounded-md text-sm transition-all ${groupMode === 'time' ? 'bg-nexus-800 text-white shadow' : 'text-gray-500 hover:text-gray-300'}`}
           >
             <Calendar size={14} className="mr-2" />
-            Time
+            {t('library.time')}
           </button>
           <button 
             onClick={() => setGroupMode('semantic')}
             className={`flex items-center px-3 py-1.5 rounded-md text-sm transition-all ${groupMode === 'semantic' ? 'bg-nexus-accent/20 text-nexus-accent shadow ring-1 ring-nexus-accent/50' : 'text-gray-500 hover:text-gray-300'}`}
           >
             <BrainCircuit size={14} className="mr-2" />
-            Smart
+            {t('library.smart')}
           </button>
         </div>
       </div>
@@ -100,13 +102,13 @@ const SmartLibrary: React.FC = () => {
         className={`m-8 mb-0 p-8 border-2 border-dashed rounded-xl flex flex-col items-center justify-center transition-all duration-300 cursor-pointer ${isDragging ? 'border-nexus-accent bg-nexus-accent/10' : 'border-nexus-border bg-nexus-900/30 hover:bg-nexus-900/50'}`}
         onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
         onDragLeave={() => setIsDragging(false)}
-        onDrop={(e) => { e.preventDefault(); setIsDragging(false); alert("Demo: Files 'uploaded' successfully!"); }}
+        onDrop={(e) => { e.preventDefault(); setIsDragging(false); alert(t('library.uploaded')); }}
       >
         <div className="bg-nexus-800 p-3 rounded-full mb-3">
             <UploadCloud size={24} className="text-gray-300" />
         </div>
-        <div className="text-gray-300 font-medium">Drop files to auto-index</div>
-        <div className="text-xs text-gray-500 mt-1">Supports PDF, MD, Code, Images</div>
+        <div className="text-gray-300 font-medium">{t('library.dropMain')}</div>
+        <div className="text-xs text-gray-500 mt-1">{t('library.dropSub')}</div>
       </div>
 
       {/* Content Grid */}

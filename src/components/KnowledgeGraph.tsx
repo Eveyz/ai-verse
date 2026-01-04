@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { GraphData, Node, Link } from '../types';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface KnowledgeGraphProps {
   data: GraphData;
 }
 
 const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data }) => {
+  const { t } = useLanguage();
   const svgRef = useRef<SVGSVGElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
@@ -113,16 +115,25 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data }) => {
     };
   }, [data]);
 
+  const getLabelForType = (type: string) => {
+      switch(type) {
+          case 'concept': return t('graph.legend.concept');
+          case 'file': return t('graph.legend.file');
+          case 'person': return t('graph.legend.entity');
+          default: return type;
+      }
+  };
+
   return (
     <div className="w-full h-full flex overflow-hidden">
       <div ref={wrapperRef} className="flex-1 h-full relative bg-nexus-950">
         <div className="absolute top-4 left-4 z-10 bg-nexus-900/80 backdrop-blur border border-nexus-border p-3 rounded-lg">
-          <h2 className="text-sm font-semibold text-gray-200">Knowledge Topology</h2>
-          <p className="text-xs text-gray-500">Visualizing 1,204 nodes • 3.4k relations</p>
+          <h2 className="text-sm font-semibold text-gray-200">{t('graph.topology')}</h2>
+          <p className="text-xs text-gray-500">{t('graph.stats')}</p>
           <div className="mt-2 flex gap-2 text-[10px] uppercase font-bold tracking-wider">
-            <span className="text-nexus-accent">Concept</span>
-            <span className="text-blue-500">File</span>
-            <span className="text-emerald-500">Entity</span>
+            <span className="text-nexus-accent">{t('graph.legend.concept')}</span>
+            <span className="text-blue-500">{t('graph.legend.file')}</span>
+            <span className="text-emerald-500">{t('graph.legend.entity')}</span>
           </div>
         </div>
         <svg ref={svgRef} className="w-full h-full"></svg>
@@ -132,18 +143,18 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data }) => {
         <div className="w-80 border-l border-nexus-border bg-nexus-900 p-6 shadow-2xl overflow-y-auto">
           <div className="flex items-center justify-between mb-4">
             <span className={`text-[10px] uppercase font-bold px-2 py-1 rounded ${selectedNode.type === 'concept' ? 'bg-nexus-accent/20 text-nexus-accent' : 'bg-gray-800 text-gray-400'}`}>
-              {selectedNode.type}
+              {getLabelForType(selectedNode.type)}
             </span>
             <button onClick={() => setSelectedNode(null)} className="text-gray-500 hover:text-white">&times;</button>
           </div>
           <h2 className="text-2xl font-bold text-white mb-2">{selectedNode.label}</h2>
           <p className="text-sm text-gray-400 mb-6">
-            Found in 12 documents. First indexed 3 months ago.
+            {t('graph.foundIn')}
           </p>
           
           <div className="space-y-4">
             <div>
-              <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Connected Entities</h4>
+              <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{t('graph.connectedEntities')}</h4>
               <div className="space-y-1">
                 {data.links
                   .filter(l => (l.source as any).id === selectedNode.id || (l.target as any).id === selectedNode.id)
@@ -160,12 +171,12 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data }) => {
             </div>
             
             <div>
-              <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Actions</h4>
+              <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{t('graph.actions')}</h4>
               <button className="w-full py-2 bg-nexus-800 hover:bg-nexus-700 text-white rounded text-sm mb-2">
-                Show Evolution Timeline
+                {t('graph.showTimeline')}
               </button>
               <button className="w-full py-2 border border-nexus-border text-gray-300 hover:bg-nexus-800 rounded text-sm">
-                Start Chat from Node
+                {t('graph.startChat')}
               </button>
             </div>
           </div>

@@ -2,11 +2,21 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, FileText, Sparkles, XCircle } from 'lucide-react';
 import { generateSynthesizedResponse } from '../services/geminiService';
 import { ChatMessage } from '../types';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const AgentView: React.FC = () => {
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    { id: '1', role: 'model', text: 'I am ready. I have indexed your local documents, codebases, and notes. I can help you synthesize documents or find contradictions across versions.' }
-  ]);
+  const { t } = useLanguage();
+  // Using lazy initialization for state so that t() is available
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [hasInitialized, setHasInitialized] = useState(false);
+
+  useEffect(() => {
+    if (!hasInitialized) {
+        setMessages([{ id: '1', role: 'model', text: t('agent.initialMessage') }]);
+        setHasInitialized(true);
+    }
+  }, [t, hasInitialized]);
+
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -49,7 +59,7 @@ const AgentView: React.FC = () => {
                 {messages.map((msg) => (
                     <div key={msg.id} className={`flex gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${msg.role === 'model' ? 'bg-nexus-accent' : 'bg-gray-600'}`}>
-                            {msg.role === 'model' ? <Bot size={18} className="text-white" /> : <div className="text-xs font-bold text-white">ME</div>}
+                            {msg.role === 'model' ? <Bot size={18} className="text-white" /> : <div className="text-xs font-bold text-white">{t('agent.me')}</div>}
                         </div>
                         <div className={`flex flex-col max-w-[80%] ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
                             <div className={`p-4 rounded-2xl ${
@@ -65,7 +75,7 @@ const AgentView: React.FC = () => {
                             {/* L1 Feature: Source transparency */}
                             {msg.role === 'model' && (
                                 <div className="mt-2 flex items-center space-x-2">
-                                    <span className="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Sources:</span>
+                                    <span className="text-[10px] uppercase text-gray-500 font-bold tracking-wider">{t('agent.sources')}:</span>
                                     <span className="text-xs text-blue-400 hover:underline cursor-pointer bg-blue-400/10 px-2 py-0.5 rounded">architecture_v2.md</span>
                                     <span className="text-xs text-blue-400 hover:underline cursor-pointer bg-blue-400/10 px-2 py-0.5 rounded">optimization.txt</span>
                                 </div>
@@ -80,7 +90,7 @@ const AgentView: React.FC = () => {
                             <Bot size={18} className="text-white" />
                         </div>
                         <div className="flex items-center text-gray-500 text-sm italic">
-                            Synthesizing knowledge graph...
+                            {t('agent.synthesizing')}
                         </div>
                     </div>
                 )}
@@ -90,7 +100,7 @@ const AgentView: React.FC = () => {
                 <div className="relative">
                     <input
                         className="w-full bg-nexus-900 border border-nexus-border rounded-xl pl-4 pr-12 py-3 text-white focus:ring-1 focus:ring-nexus-accent focus:border-nexus-accent transition-all"
-                        placeholder="Message your Knowledge Base..."
+                        placeholder={t('agent.placeholder')}
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSend()}
@@ -110,20 +120,20 @@ const AgentView: React.FC = () => {
             <div className="p-4 border-b border-nexus-border flex items-center justify-between">
                 <div className="flex items-center gap-2 text-gray-200 font-semibold">
                     <Sparkles size={18} className="text-yellow-500" />
-                    <span>Active Workflow</span>
+                    <span>{t('agent.workflowTitle')}</span>
                 </div>
             </div>
             <div className="flex-1 p-6 flex flex-col items-center justify-center text-center">
                  <div className="w-16 h-16 bg-nexus-800 rounded-2xl flex items-center justify-center mb-4 border border-nexus-border">
                     <FileText size={32} className="text-nexus-accent" />
                  </div>
-                 <h3 className="text-lg font-medium text-white mb-2">Knowledge Synthesis</h3>
+                 <h3 className="text-lg font-medium text-white mb-2">{t('agent.synthesisTitle')}</h3>
                  <p className="text-sm text-gray-500 px-8">
-                     Nexus doesn't just answer questions. Ask it to "Draft a PRD based on these docs" or "Find contradictions between v1 and v2" to see the artifact panel in action.
+                     {t('agent.synthesisDesc')}
                  </p>
                  
                  <div className="mt-8 w-full bg-nexus-950 rounded border border-nexus-border p-4 text-left">
-                    <div className="text-xs font-mono text-gray-500 mb-2 border-b border-nexus-border pb-2">Draft: optimization_plan.md</div>
+                    <div className="text-xs font-mono text-gray-500 mb-2 border-b border-nexus-border pb-2">{t('agent.draft')}: optimization_plan.md</div>
                     <div className="space-y-2 animate-pulse">
                         <div className="h-2 bg-nexus-800 rounded w-3/4"></div>
                         <div className="h-2 bg-nexus-800 rounded w-full"></div>
