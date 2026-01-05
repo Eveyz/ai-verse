@@ -24,7 +24,8 @@ impl LLMBackend {
                 let client = reqwest::Client::new();
                 let url = format!("{}/api/generate", base_url);
 
-                let res = client.post(url)
+                let res = client
+                    .post(url)
                     .json(&json!({
                         "model": model,
                         "prompt": format!("System: {}\nUser: {}", system, prompt),

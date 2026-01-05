@@ -77,7 +77,16 @@ export const translations: Translations = {
       previously: "Previously",
       evolvedTo: "Evolved To",
       impactedFiles: "Impacted Files",
-      selectEvent: "Select an event from the timeline to view details"
+      selectEvent: "Select an event from the timeline to view details",
+      views: {
+        global: "Global Milestones",
+        concept: "Concept Drift",
+        file: "File History"
+      },
+      filterTitle: "Scope & Filters",
+      showing: "Showing",
+      allEvents: "All events",
+      scopeDesc: "Narrow down the timeline to see specific evolution tracks."
     },
     library: {
       title: "Smart Library",
@@ -132,7 +141,14 @@ export const translations: Translations = {
       popular: "POPULAR",
       proPlan: "Pro Plan",
       enterprisePlan: "Enterprise",
-      month: "/mo"
+      month: "/mo",
+      appearance: "Appearance",
+      theme: "Theme",
+      themes: {
+        light: "Light",
+        dark: "Dark",
+        auto: "Auto"
+      }
     }
   },
   zh: {
@@ -209,7 +225,16 @@ export const translations: Translations = {
       previously: "变更前",
       evolvedTo: "演化为",
       impactedFiles: "受影响文件",
-      selectEvent: "从时间轴选择事件以查看详情"
+      selectEvent: "从时间轴选择事件以查看详情",
+      views: {
+        global: "全局里程碑",
+        concept: "概念漂移",
+        file: "文件历史"
+      },
+      filterTitle: "范围 & 过滤器",
+      showing: "当前显示",
+      allEvents: "所有事件",
+      scopeDesc: "缩小时间轴范围以查看特定的演化轨迹。"
     },
     library: {
       title: "智能资料库",
@@ -264,7 +289,14 @@ export const translations: Translations = {
       popular: "热门",
       proPlan: "专业版",
       enterprisePlan: "企业版",
-      month: "/月"
+      month: "/月",
+      appearance: "外观",
+      theme: "主题",
+      themes: {
+        light: "浅色",
+        dark: "深色",
+        auto: "跟随系统"
+      }
     }
   }
 };

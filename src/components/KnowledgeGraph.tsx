@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { GraphData, Node, Link } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface KnowledgeGraphProps {
   data: GraphData;
@@ -9,6 +10,7 @@ interface KnowledgeGraphProps {
 
 const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data }) => {
   const { t } = useLanguage();
+  const { currentTheme } = useTheme(); // Listen to theme changes
   const svgRef = useRef<SVGSVGElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
@@ -18,6 +20,12 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data }) => {
 
     const width = wrapperRef.current.clientWidth;
     const height = wrapperRef.current.clientHeight;
+
+    // Resolve CSS variables to actual colors for D3
+    const style = getComputedStyle(document.documentElement);
+    const borderColor = style.getPropertyValue('--color-nexus-border').trim() || '#3f3f46';
+    const textColor = style.getPropertyValue('--color-nexus-text-secondary').trim() || '#a1a1aa';
+    const accentColor = style.getPropertyValue('--color-nexus-accent').trim() || '#8b5cf6';
 
     // Clear previous
     d3.select(svgRef.current).selectAll("*").remove();
@@ -36,7 +44,7 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data }) => {
 
     // Links
     const link = svg.append("g")
-      .attr("stroke", "#3f3f46") // nexus-border
+      .attr("stroke", borderColor)
       .attr("stroke-opacity", 0.6)
       .selectAll("line")
       .data(data.links)
@@ -45,7 +53,7 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data }) => {
 
     // Node Groups
     const node = svg.append("g")
-      .attr("stroke", "#fff")
+      .attr("stroke", currentTheme === 'dark' ? '#000' : '#fff')
       .attr("stroke-width", 1.5)
       .selectAll("g")
       .data(data.nodes)
@@ -60,7 +68,7 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data }) => {
       .attr("r", (d) => d.val)
       .attr("fill", (d) => {
         switch(d.type) {
-          case 'concept': return '#8b5cf6'; // accent
+          case 'concept': return accentColor;
           case 'file': return '#3b82f6'; // blue
           case 'person': return '#10b981'; // emerald
           default: return '#71717a';
@@ -77,7 +85,7 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data }) => {
       .text((d) => d.label)
       .attr("x", (d) => d.val + 5)
       .attr("y", 4)
-      .attr("fill", "#a1a1aa")
+      .attr("fill", textColor)
       .attr("font-size", "10px")
       .attr("stroke", "none")
       .attr("font-family", "Inter, sans-serif");
@@ -113,7 +121,7 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data }) => {
     return () => {
       simulation.stop();
     };
-  }, [data]);
+  }, [data, currentTheme]); // Re-run when theme changes
 
   const getLabelForType = (type: string) => {
       switch(type) {
@@ -126,10 +134,10 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data }) => {
 
   return (
     <div className="w-full h-full flex overflow-hidden">
-      <div ref={wrapperRef} className="flex-1 h-full relative bg-nexus-950">
+      <div ref={wrapperRef} className="flex-1 h-full relative bg-nexus-950 transition-colors duration-300">
         <div className="absolute top-4 left-4 z-10 bg-nexus-900/80 backdrop-blur border border-nexus-border p-3 rounded-lg">
-          <h2 className="text-sm font-semibold text-gray-200">{t('graph.topology')}</h2>
-          <p className="text-xs text-gray-500">{t('graph.stats')}</p>
+          <h2 className="text-sm font-semibold text-nexus-text-primary">{t('graph.topology')}</h2>
+          <p className="text-xs text-nexus-text-secondary">{t('graph.stats')}</p>
           <div className="mt-2 flex gap-2 text-[10px] uppercase font-bold tracking-wider">
             <span className="text-nexus-accent">{t('graph.legend.concept')}</span>
             <span className="text-blue-500">{t('graph.legend.file')}</span>
@@ -140,28 +148,28 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data }) => {
       </div>
 
       {selectedNode && (
-        <div className="w-80 border-l border-nexus-border bg-nexus-900 p-6 shadow-2xl overflow-y-auto">
+        <div className="w-80 border-l border-nexus-border bg-nexus-900 p-6 shadow-2xl overflow-y-auto z-20 transition-colors duration-300">
           <div className="flex items-center justify-between mb-4">
-            <span className={`text-[10px] uppercase font-bold px-2 py-1 rounded ${selectedNode.type === 'concept' ? 'bg-nexus-accent/20 text-nexus-accent' : 'bg-gray-800 text-gray-400'}`}>
+            <span className={`text-[10px] uppercase font-bold px-2 py-1 rounded ${selectedNode.type === 'concept' ? 'bg-nexus-accent/20 text-nexus-accent' : 'bg-nexus-950 text-nexus-text-secondary'}`}>
               {getLabelForType(selectedNode.type)}
             </span>
-            <button onClick={() => setSelectedNode(null)} className="text-gray-500 hover:text-white">&times;</button>
+            <button onClick={() => setSelectedNode(null)} className="text-nexus-text-secondary hover:text-nexus-text-primary">&times;</button>
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">{selectedNode.label}</h2>
-          <p className="text-sm text-gray-400 mb-6">
+          <h2 className="text-2xl font-bold text-nexus-text-primary mb-2">{selectedNode.label}</h2>
+          <p className="text-sm text-nexus-text-secondary mb-6">
             {t('graph.foundIn')}
           </p>
           
           <div className="space-y-4">
             <div>
-              <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{t('graph.connectedEntities')}</h4>
+              <h4 className="text-xs font-semibold text-nexus-text-secondary uppercase tracking-wider mb-2">{t('graph.connectedEntities')}</h4>
               <div className="space-y-1">
                 {data.links
                   .filter(l => (l.source as any).id === selectedNode.id || (l.target as any).id === selectedNode.id)
                   .map((l, i) => {
                      const target = (l.target as any).id === selectedNode.id ? (l.source as any) : (l.target as any);
                      return (
-                       <div key={i} className="text-sm text-gray-300 bg-nexus-950 p-2 rounded border border-nexus-border/50">
+                       <div key={i} className="text-sm text-nexus-text-primary bg-nexus-950 p-2 rounded border border-nexus-border/50">
                          {target.label}
                        </div>
                      )
@@ -171,11 +179,11 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data }) => {
             </div>
             
             <div>
-              <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{t('graph.actions')}</h4>
-              <button className="w-full py-2 bg-nexus-800 hover:bg-nexus-700 text-white rounded text-sm mb-2">
+              <h4 className="text-xs font-semibold text-nexus-text-secondary uppercase tracking-wider mb-2">{t('graph.actions')}</h4>
+              <button className="w-full py-2 bg-nexus-800 hover:bg-nexus-700 text-nexus-text-primary rounded text-sm mb-2 transition-colors">
                 {t('graph.showTimeline')}
               </button>
-              <button className="w-full py-2 border border-nexus-border text-gray-300 hover:bg-nexus-800 rounded text-sm">
+              <button className="w-full py-2 border border-nexus-border text-nexus-text-secondary hover:text-nexus-text-primary hover:bg-nexus-800 rounded text-sm transition-colors">
                 {t('graph.startChat')}
               </button>
             </div>

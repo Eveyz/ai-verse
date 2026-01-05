@@ -19,8 +19,8 @@ const StatCard = ({ label, value, icon: Icon, color }: any) => (
       </div>
       <span className="text-xs text-green-500 font-mono">+12%</span>
     </div>
-    <div className="text-2xl font-bold text-white mb-1">{value}</div>
-    <div className="text-sm text-gray-500">{label}</div>
+    <div className="text-2xl font-bold text-nexus-text-primary mb-1">{value}</div>
+    <div className="text-sm text-nexus-text-secondary">{label}</div>
   </div>
 );
 
@@ -30,8 +30,8 @@ const Dashboard: React.FC = () => {
   return (
     <div className="p-8 max-w-7xl mx-auto h-full overflow-y-auto">
       <header className="mb-8">
-        <h1 className="text-3xl font-bold text-white">{t('dashboard.title')}</h1>
-        <p className="text-gray-400 mt-2">{t('dashboard.subtitle')}</p>
+        <h1 className="text-3xl font-bold text-nexus-text-primary">{t('dashboard.title')}</h1>
+        <p className="text-nexus-text-secondary mt-2">{t('dashboard.subtitle')}</p>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -43,30 +43,30 @@ const Dashboard: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 bg-nexus-900 border border-nexus-border p-6 rounded-xl">
-          <h3 className="text-lg font-semibold text-white mb-6">{t('dashboard.ingestionVelocity')}</h3>
+          <h3 className="text-lg font-semibold text-nexus-text-primary mb-6">{t('dashboard.ingestionVelocity')}</h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data}>
-                 <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
-                <XAxis dataKey="name" stroke="#71717a" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#71717a" fontSize={12} tickLine={false} axisLine={false} />
+                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-nexus-border)" vertical={false} />
+                <XAxis dataKey="name" stroke="var(--color-nexus-text-secondary)" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis stroke="var(--color-nexus-text-secondary)" fontSize={12} tickLine={false} axisLine={false} />
                 <Tooltip 
-                    contentStyle={{ backgroundColor: '#18181b', border: '1px solid #3f3f46', borderRadius: '8px' }}
-                    itemStyle={{ color: '#e4e4e7' }}
+                    contentStyle={{ backgroundColor: 'var(--color-nexus-900)', border: '1px solid var(--color-nexus-border)', borderRadius: '8px' }}
+                    itemStyle={{ color: 'var(--color-nexus-text-primary)' }}
                 />
-                <Bar dataKey="chunks" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="chunks" fill="var(--color-nexus-accent)" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         <div className="bg-nexus-900 border border-nexus-border p-6 rounded-xl">
-          <h3 className="text-lg font-semibold text-white mb-4">{t('dashboard.systemHealth')}</h3>
+          <h3 className="text-lg font-semibold text-nexus-text-primary mb-4">{t('dashboard.systemHealth')}</h3>
           <div className="space-y-4">
              <div>
                 <div className="flex justify-between text-sm mb-1">
-                   <span className="text-gray-400">{t('dashboard.vectorStore')}</span>
-                   <span className="text-white">1.2 GB / 50 GB</span>
+                   <span className="text-nexus-text-secondary">{t('dashboard.vectorStore')}</span>
+                   <span className="text-nexus-text-primary">1.2 GB / 50 GB</span>
                 </div>
                 <div className="w-full bg-nexus-950 rounded-full h-2">
                    <div className="bg-emerald-500 h-2 rounded-full" style={{ width: '4%' }}></div>
@@ -74,8 +74,8 @@ const Dashboard: React.FC = () => {
              </div>
              <div>
                 <div className="flex justify-between text-sm mb-1">
-                   <span className="text-gray-400">{t('dashboard.memoryUsage')}</span>
-                   <span className="text-white">450 MB</span>
+                   <span className="text-nexus-text-secondary">{t('dashboard.memoryUsage')}</span>
+                   <span className="text-nexus-text-primary">450 MB</span>
                 </div>
                 <div className="w-full bg-nexus-950 rounded-full h-2">
                    <div className="bg-blue-500 h-2 rounded-full" style={{ width: '30%' }}></div>
@@ -83,8 +83,8 @@ const Dashboard: React.FC = () => {
              </div>
              <div>
                 <div className="flex justify-between text-sm mb-1">
-                   <span className="text-gray-400">{t('dashboard.queue')}</span>
-                   <span className="text-white">Idle</span>
+                   <span className="text-nexus-text-secondary">{t('dashboard.queue')}</span>
+                   <span className="text-nexus-text-primary">Idle</span>
                 </div>
                 <div className="w-full bg-nexus-950 rounded-full h-2">
                    <div className="bg-gray-700 h-2 rounded-full" style={{ width: '0%' }}></div>
@@ -95,9 +95,9 @@ const Dashboard: React.FC = () => {
           <div className="mt-8 pt-6 border-t border-nexus-border">
              <div className="text-sm font-semibold text-gray-300 mb-2">{t('dashboard.activePlugins')}</div>
              <div className="flex flex-wrap gap-2">
-                <span className="px-2 py-1 bg-nexus-800 text-xs text-gray-400 rounded border border-nexus-border">Parsers: PDF, MD</span>
-                <span className="px-2 py-1 bg-nexus-800 text-xs text-gray-400 rounded border border-nexus-border">Model: Gemini Flash</span>
-                <span className="px-2 py-1 bg-nexus-800 text-xs text-gray-400 rounded border border-nexus-border">Graph: Enabled</span>
+                <span className="px-2 py-1 bg-nexus-800 text-xs text-nexus-text-secondary rounded border border-nexus-border">Parsers: PDF, MD</span>
+                <span className="px-2 py-1 bg-nexus-800 text-xs text-nexus-text-secondary rounded border border-nexus-border">Model: Gemini Flash</span>
+                <span className="px-2 py-1 bg-nexus-800 text-xs text-nexus-text-secondary rounded border border-nexus-border">Graph: Enabled</span>
              </div>
           </div>
         </div>

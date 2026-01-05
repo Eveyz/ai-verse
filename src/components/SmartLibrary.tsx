@@ -25,11 +25,11 @@ const SmartLibrary: React.FC = () => {
 
   const getFileIcon = (type: LibraryFile['type']) => {
     switch (type) {
-      case 'code': return <Code size={20} className="text-yellow-400" />;
-      case 'md': return <FileText size={20} className="text-blue-400" />;
-      case 'pdf': return <FileText size={20} className="text-red-400" />;
-      case 'img': return <Image size={20} className="text-purple-400" />;
-      case 'sheet': return <Table size={20} className="text-green-400" />;
+      case 'code': return <Code size={20} className="text-yellow-500" />;
+      case 'md': return <FileText size={20} className="text-blue-500" />;
+      case 'pdf': return <FileText size={20} className="text-red-500" />;
+      case 'img': return <Image size={20} className="text-purple-500" />;
+      case 'sheet': return <Table size={20} className="text-green-500" />;
       default: return <File size={20} className="text-gray-400" />;
     }
   };
@@ -57,39 +57,39 @@ const SmartLibrary: React.FC = () => {
   }, [groupMode]);
 
   return (
-    <div className="flex flex-col h-full bg-nexus-950">
+    <div className="flex flex-col h-full bg-nexus-950 transition-colors duration-300">
       {/* Header & Controls */}
       <div className="p-8 border-b border-nexus-border flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-1">{t('library.title')}</h1>
-          <p className="text-gray-400 text-sm">{t('library.subtitle')}</p>
+          <h1 className="text-3xl font-bold text-nexus-text-primary mb-1">{t('library.title')}</h1>
+          <p className="text-nexus-text-secondary text-sm">{t('library.subtitle')}</p>
         </div>
 
         <div className="flex bg-nexus-900 p-1 rounded-lg border border-nexus-border">
           <button 
             onClick={() => setGroupMode('none')}
-            className={`flex items-center px-3 py-1.5 rounded-md text-sm transition-all ${groupMode === 'none' ? 'bg-nexus-800 text-white shadow' : 'text-gray-500 hover:text-gray-300'}`}
+            className={`flex items-center px-3 py-1.5 rounded-md text-sm transition-all ${groupMode === 'none' ? 'bg-nexus-800 text-nexus-text-primary shadow' : 'text-nexus-text-secondary hover:text-nexus-text-primary'}`}
           >
             <Grid size={14} className="mr-2" />
             {t('library.grid')}
           </button>
           <button 
             onClick={() => setGroupMode('type')}
-            className={`flex items-center px-3 py-1.5 rounded-md text-sm transition-all ${groupMode === 'type' ? 'bg-nexus-800 text-white shadow' : 'text-gray-500 hover:text-gray-300'}`}
+            className={`flex items-center px-3 py-1.5 rounded-md text-sm transition-all ${groupMode === 'type' ? 'bg-nexus-800 text-nexus-text-primary shadow' : 'text-nexus-text-secondary hover:text-nexus-text-primary'}`}
           >
             <Box size={14} className="mr-2" />
             {t('library.type')}
           </button>
           <button 
             onClick={() => setGroupMode('time')}
-            className={`flex items-center px-3 py-1.5 rounded-md text-sm transition-all ${groupMode === 'time' ? 'bg-nexus-800 text-white shadow' : 'text-gray-500 hover:text-gray-300'}`}
+            className={`flex items-center px-3 py-1.5 rounded-md text-sm transition-all ${groupMode === 'time' ? 'bg-nexus-800 text-nexus-text-primary shadow' : 'text-nexus-text-secondary hover:text-nexus-text-primary'}`}
           >
             <Calendar size={14} className="mr-2" />
             {t('library.time')}
           </button>
           <button 
             onClick={() => setGroupMode('semantic')}
-            className={`flex items-center px-3 py-1.5 rounded-md text-sm transition-all ${groupMode === 'semantic' ? 'bg-nexus-accent/20 text-nexus-accent shadow ring-1 ring-nexus-accent/50' : 'text-gray-500 hover:text-gray-300'}`}
+            className={`flex items-center px-3 py-1.5 rounded-md text-sm transition-all ${groupMode === 'semantic' ? 'bg-nexus-accent/20 text-nexus-accent shadow ring-1 ring-nexus-accent/50' : 'text-nexus-text-secondary hover:text-nexus-text-primary'}`}
           >
             <BrainCircuit size={14} className="mr-2" />
             {t('library.smart')}
@@ -105,22 +105,22 @@ const SmartLibrary: React.FC = () => {
         onDrop={(e) => { e.preventDefault(); setIsDragging(false); alert(t('library.uploaded')); }}
       >
         <div className="bg-nexus-800 p-3 rounded-full mb-3">
-            <UploadCloud size={24} className="text-gray-300" />
+            <UploadCloud size={24} className="text-nexus-text-secondary" />
         </div>
-        <div className="text-gray-300 font-medium">{t('library.dropMain')}</div>
-        <div className="text-xs text-gray-500 mt-1">{t('library.dropSub')}</div>
+        <div className="text-nexus-text-primary font-medium">{t('library.dropMain')}</div>
+        <div className="text-xs text-nexus-text-secondary mt-1">{t('library.dropSub')}</div>
       </div>
 
       {/* Content Grid */}
       <div className="flex-1 overflow-y-auto p-8">
         {Object.entries(groupedFiles).map(([groupName, files]) => (
           <div key={groupName} className="mb-8">
-            <h2 className="flex items-center text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 border-b border-nexus-border pb-2">
+            <h2 className="flex items-center text-sm font-bold text-nexus-text-secondary uppercase tracking-wider mb-4 border-b border-nexus-border pb-2">
               {groupMode === 'semantic' && <BrainCircuit size={14} className="mr-2 text-nexus-accent" />}
-              {groupMode === 'time' && <Calendar size={14} className="mr-2 text-blue-400" />}
-              {groupMode === 'type' && <Box size={14} className="mr-2 text-yellow-400" />}
+              {groupMode === 'time' && <Calendar size={14} className="mr-2 text-blue-500" />}
+              {groupMode === 'type' && <Box size={14} className="mr-2 text-yellow-500" />}
               {groupName} 
-              <span className="ml-2 text-xs bg-nexus-800 text-gray-500 px-1.5 py-0.5 rounded-full normal-case">{files.length}</span>
+              <span className="ml-2 text-xs bg-nexus-800 text-nexus-text-secondary px-1.5 py-0.5 rounded-full normal-case">{files.length}</span>
             </h2>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
@@ -138,13 +138,13 @@ const SmartLibrary: React.FC = () => {
                     </div>
                     {/* Badge for Semantic Mode */}
                     {groupMode !== 'semantic' && (
-                         <span className="text-[10px] text-gray-600 border border-nexus-border px-1 rounded">{file.type}</span>
+                         <span className="text-[10px] text-nexus-text-secondary border border-nexus-border px-1 rounded">{file.type}</span>
                     )}
                   </div>
                   
                   <div>
-                    <div className="text-gray-200 font-medium text-sm truncate mb-1" title={file.name}>{file.name}</div>
-                    <div className="flex items-center justify-between text-[10px] text-gray-500 font-mono">
+                    <div className="text-nexus-text-primary font-medium text-sm truncate mb-1" title={file.name}>{file.name}</div>
+                    <div className="flex items-center justify-between text-[10px] text-nexus-text-secondary font-mono">
                         <span>{file.size}</span>
                         <span>{file.lastModified}</span>
                     </div>

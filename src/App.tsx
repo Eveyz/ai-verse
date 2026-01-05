@@ -10,6 +10,7 @@ import Settings from './components/Settings';
 import { ViewMode, User, UserSubscription } from './types';
 import { MOCK_GRAPH_DATA, MOCK_USER } from './constants';
 import { LanguageProvider } from './contexts/LanguageContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 const AppContent: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewMode>(ViewMode.DASHBOARD);
@@ -58,7 +59,7 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen bg-nexus-950 text-gray-100 font-sans overflow-hidden">
+    <div className="flex h-screen bg-nexus-950 text-nexus-text-primary font-sans overflow-hidden transition-colors duration-300">
       <Sidebar 
         currentView={currentView} 
         onViewChange={setCurrentView} 
@@ -73,9 +74,11 @@ const AppContent: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <LanguageProvider>
-      <AppContent />
-    </LanguageProvider>
+    <ThemeProvider>
+      <LanguageProvider>
+        <AppContent />
+      </LanguageProvider>
+    </ThemeProvider>
   );
 };
 

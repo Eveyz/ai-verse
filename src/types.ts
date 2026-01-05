@@ -9,6 +9,7 @@ export enum ViewMode {
 }
 
 export type Language = 'en' | 'zh';
+export type Theme = 'light' | 'dark' | 'system';
 
 export interface Node {
   id: string;
@@ -51,10 +52,15 @@ export interface ChatMessage {
   sources?: SearchResult[];
 }
 
+// Updated Timeline Types
+export type TimelineScope = 'global' | 'concept' | 'file';
+
 export interface TimelineEvent {
   id: string;
   date: string;
   type: 'emergence' | 'refinement' | 'contradiction' | 'milestone';
+  scope: TimelineScope; // New field
+  targetId?: string; // If scope is file/concept, which one?
   title: string;
   description: string;
   relatedFiles: string[];

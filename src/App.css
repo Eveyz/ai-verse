@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* -------------------------------------------------
+   1. Tailwind semantic tokens (theme-agnostic)
+-------------------------------------------------- */
 @theme {
   /* Breakpoints */
   --breakpoint-sm: 30rem;
@@ -8,11 +11,77 @@
   --font-sans: "Inter", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  /* Colors: Nexus palette */
-  --color-nexus-950: #09090b;
-  --color-nexus-900: #18181b;
-  --color-nexus-800: #27272a;
-  --color-nexus-border: #3f3f46;
-  --color-nexus-accent: #8b5cf6;
-  --color-nexus-success: #10b981;
+  /* Nexus semantic colors (DO NOT hardcode themes) */
+  --color-nexus-950: var(--nexus-950);
+  --color-nexus-900: var(--nexus-900);
+  --color-nexus-800: var(--nexus-800);
+  --color-nexus-border: var(--nexus-border);
+  --color-nexus-accent: var(--nexus-accent);
+  --color-nexus-success: var(--nexus-success);
+
+  --color-nexus-text-primary: var(--nexus-text-primary);
+  --color-nexus-text-secondary: var(--nexus-text-secondary);
+}
+
+/* -------------------------------------------------
+   2. Light theme (default)
+-------------------------------------------------- */
+:root {
+  --nexus-950: #ffffff;
+  --nexus-900: #f4f4f5; /* zinc-100 */
+  --nexus-800: #e4e4e7; /* zinc-200 */
+  --nexus-border: #d4d4d8; /* zinc-300 */
+  --nexus-accent: #8b5cf6;
+  --nexus-success: #10b981;
+
+  --nexus-text-primary: #18181b; /* zinc-900 */
+  --nexus-text-secondary: #71717a; /* zinc-500 */
+}
+
+/* -------------------------------------------------
+   3. Dark theme override
+-------------------------------------------------- */
+.dark {
+  --nexus-950: #09090b;
+  --nexus-900: #18181b;
+  --nexus-800: #27272a;
+  --nexus-border: #3f3f46;
+  --nexus-accent: #8b5cf6;
+  --nexus-success: #10b981;
+
+  --nexus-text-primary: #e4e4e7; /* zinc-200 */
+  --nexus-text-secondary: #a1a1aa; /* zinc-400 */
+}
+
+/* -------------------------------------------------
+   4. Global base styles
+-------------------------------------------------- */
+body {
+  background-color: var(--nexus-950);
+  color: var(--nexus-text-primary);
+  font-family: var(--font-sans);
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+/* -------------------------------------------------
+   5. Scrollbar (desktop polish)
+-------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--nexus-900);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--nexus-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in oklab, var(--nexus-border), white 20%);
 }

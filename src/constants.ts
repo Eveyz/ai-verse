@@ -59,45 +59,71 @@ export const MOCK_SEARCH_RESULTS: SearchResult[] = [
 ];
 
 export const MOCK_TIMELINE_DATA: TimelineEvent[] = [
+  // Global Milestone
   {
     id: '1',
     date: '2023-10-25',
     type: 'milestone',
+    scope: 'global',
     title: 'Architecture v2.0 Finalized',
-    description: 'The core indexing strategy shifted from pure Vector to Hybrid (Vector + BM25).',
+    description: 'The core indexing strategy shifted from pure Vector to Hybrid (Vector + BM25). This is a system-wide change impacting all indexers.',
     relatedFiles: ['architecture_v2.md', 'meeting_notes_oct.txt'],
     diffSummary: {
       before: "Index: HNSW only",
       after: "Index: HNSW + Tantivy (BM25)"
     }
   },
+  // Concept refinement (Specific to Optimization)
   {
     id: '2',
     date: '2023-10-18',
     type: 'refinement',
+    scope: 'concept',
+    targetId: 'optimization',
     title: 'Latency Definition Updated',
-    description: 'Re-defined "acceptable latency" for local embedding generation based on user feedback.',
+    description: 'Re-defined "acceptable latency" for local embedding generation based on user feedback. This specifically refines the Optimization Strategy.',
     relatedFiles: ['optimization.txt'],
     diffSummary: {
       before: "< 500ms per chunk",
       after: "< 100ms per chunk (Main Thread Free)"
     }
   },
+  // Concept Emergence
   {
     id: '3',
     date: '2023-10-10',
     type: 'emergence',
+    scope: 'concept',
+    targetId: 'rag',
     title: 'Concept Emergence: "Graph RAG"',
     description: 'First mentions of Graph RAG appeared in your research notes. You downloaded 3 papers related to this topic.',
     relatedFiles: ['research/graph_rag_survey.pdf', 'ideas/future_roadmap.md']
   },
+  // Specific File Contradiction
   {
     id: '4',
     date: '2023-09-28',
     type: 'contradiction',
-    title: 'Conflicting Requirements Detected',
-    description: 'The prompt template in `prompts.rs` contradicts the guidelines in `style_guide.md`.',
+    scope: 'file',
+    targetId: 'prompts.rs',
+    title: 'Conflicting Persona Guidelines',
+    description: 'The code in `prompts.rs` defines a "Strict" persona, but `style_guide.md` mandates a "Friendly" persona.',
     relatedFiles: ['src/ai/prompts.rs', 'docs/style_guide.md']
+  },
+  // More File Specifics for Demo
+  {
+    id: '5',
+    date: '2023-09-15',
+    type: 'refinement',
+    scope: 'file',
+    targetId: 'main.rs',
+    title: 'Async Runtime Switch',
+    description: 'Switched main loop from standard thread::spawn to Tokio runtime.',
+    relatedFiles: ['src/main.rs'],
+    diffSummary: {
+      before: "std::thread",
+      after: "tokio::main"
+    }
   }
 ];
 

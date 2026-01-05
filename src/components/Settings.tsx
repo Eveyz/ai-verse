@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useTheme } from '../contexts/ThemeContext';
 import { 
   Server, 
   Cpu, 
@@ -22,10 +23,13 @@ import {
   Network,
   RefreshCw,
   Link as LinkIcon,
-  Globe
+  Globe,
+  Sun,
+  Moon,
+  Monitor
 } from 'lucide-react';
 import { MOCK_MODELS } from '../constants';
-import { AIModel, ComputeMode, User, UserSubscription, LocalProvider, Language } from '../types';
+import { AIModel, ComputeMode, User, UserSubscription, LocalProvider, Language, Theme } from '../types';
 
 interface SettingsProps {
   user: User | null;
@@ -36,6 +40,7 @@ interface SettingsProps {
 
 const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSubscription }) => {
   const { t, language, setLanguage } = useLanguage();
+  const { theme, setTheme } = useTheme();
   const [computeMode, setComputeMode] = useState<ComputeMode>('local');
   const [localProvider, setLocalProvider] = useState<LocalProvider>('native');
   
@@ -137,44 +142,72 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
     <div className="max-w-5xl mx-auto p-8 h-full overflow-y-auto">
       <div className="mb-8 flex items-start justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2">{t('settings.title')}</h1>
-          <p className="text-gray-400">{t('settings.subtitle')}</p>
+          <h1 className="text-3xl font-bold text-nexus-text-primary mb-2">{t('settings.title')}</h1>
+          <p className="text-nexus-text-secondary">{t('settings.subtitle')}</p>
         </div>
         
-        {/* Language Switcher */}
-        <div className="flex items-center gap-2 bg-nexus-900 border border-nexus-border rounded-lg p-1">
-            <Globe size={16} className="ml-2 text-gray-500" />
-            <select 
-                value={language} 
-                onChange={(e) => setLanguage(e.target.value as Language)}
-                className="bg-transparent text-sm text-white p-2 outline-none cursor-pointer"
-            >
-                <option value="en">English</option>
-                <option value="zh">中文 (简体)</option>
-            </select>
+        {/* Appearance & Language */}
+        <div className="flex gap-4">
+             {/* Theme Switcher */}
+            <div className="flex items-center gap-2 bg-nexus-900 border border-nexus-border rounded-lg p-1">
+                <button 
+                    onClick={() => setTheme('light')}
+                    className={`p-1.5 rounded-md transition-all ${theme === 'light' ? 'bg-nexus-800 text-nexus-text-primary shadow' : 'text-nexus-text-secondary hover:text-nexus-text-primary'}`}
+                    title={t('settings.themes.light')}
+                >
+                    <Sun size={16} />
+                </button>
+                <button 
+                    onClick={() => setTheme('dark')}
+                    className={`p-1.5 rounded-md transition-all ${theme === 'dark' ? 'bg-nexus-800 text-nexus-text-primary shadow' : 'text-nexus-text-secondary hover:text-nexus-text-primary'}`}
+                    title={t('settings.themes.dark')}
+                >
+                    <Moon size={16} />
+                </button>
+                <button 
+                    onClick={() => setTheme('system')}
+                    className={`p-1.5 rounded-md transition-all ${theme === 'system' ? 'bg-nexus-800 text-nexus-text-primary shadow' : 'text-nexus-text-secondary hover:text-nexus-text-primary'}`}
+                    title={t('settings.themes.auto')}
+                >
+                    <Monitor size={16} />
+                </button>
+            </div>
+
+            {/* Language Switcher */}
+            <div className="flex items-center gap-2 bg-nexus-900 border border-nexus-border rounded-lg p-1">
+                <Globe size={16} className="ml-2 text-nexus-text-secondary" />
+                <select 
+                    value={language} 
+                    onChange={(e) => setLanguage(e.target.value as Language)}
+                    className="bg-transparent text-sm text-nexus-text-primary p-2 outline-none cursor-pointer"
+                >
+                    <option value="en" className="bg-nexus-900">English</option>
+                    <option value="zh" className="bg-nexus-900">中文 (简体)</option>
+                </select>
+            </div>
         </div>
       </div>
 
       {/* ACCOUNT SECTION */}
       <div className="mb-10 animate-in fade-in slide-in-from-top-2 duration-500">
-         <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2">
+         <h2 className="text-sm font-bold text-nexus-text-secondary uppercase tracking-wider mb-4 flex items-center gap-2">
             <UserIcon size={16} /> {t('settings.account')}
          </h2>
          
          {!user ? (
              <div className="bg-nexus-900 border border-nexus-border rounded-xl p-8 flex flex-col md:flex-row gap-8 items-center">
                  <div className="flex-1">
-                     <h3 className="text-2xl font-bold text-white mb-2">{t('settings.signInTitle')}</h3>
-                     <p className="text-gray-400 mb-6">{t('settings.signInDesc')}</p>
+                     <h3 className="text-2xl font-bold text-nexus-text-primary mb-2">{t('settings.signInTitle')}</h3>
+                     <p className="text-nexus-text-secondary mb-6">{t('settings.signInDesc')}</p>
                      <form onSubmit={handleLoginSubmit} className="space-y-4 max-w-md">
                          <div>
-                             <label className="block text-xs text-gray-500 mb-1">{t('settings.email')}</label>
+                             <label className="block text-xs text-nexus-text-secondary mb-1">{t('settings.email')}</label>
                              <div className="relative">
-                                 <Mail size={16} className="absolute left-3 top-3 text-gray-500" />
+                                 <Mail size={16} className="absolute left-3 top-3 text-nexus-text-secondary" />
                                  <input 
                                     type="email" 
                                     required
-                                    className="w-full bg-nexus-950 border border-nexus-border rounded-lg py-2.5 pl-10 pr-4 text-white focus:border-nexus-accent outline-none transition-colors"
+                                    className="w-full bg-nexus-950 border border-nexus-border rounded-lg py-2.5 pl-10 pr-4 text-nexus-text-primary focus:border-nexus-accent outline-none transition-colors"
                                     placeholder="you@company.com"
                                     value={emailInput}
                                     onChange={(e) => setEmailInput(e.target.value)}
@@ -182,13 +215,13 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                              </div>
                          </div>
                          <div>
-                             <label className="block text-xs text-gray-500 mb-1">{t('settings.password')}</label>
+                             <label className="block text-xs text-nexus-text-secondary mb-1">{t('settings.password')}</label>
                              <div className="relative">
-                                 <Lock size={16} className="absolute left-3 top-3 text-gray-500" />
+                                 <Lock size={16} className="absolute left-3 top-3 text-nexus-text-secondary" />
                                  <input 
                                     type="password" 
                                     required
-                                    className="w-full bg-nexus-950 border border-nexus-border rounded-lg py-2.5 pl-10 pr-4 text-white focus:border-nexus-accent outline-none transition-colors"
+                                    className="w-full bg-nexus-950 border border-nexus-border rounded-lg py-2.5 pl-10 pr-4 text-nexus-text-primary focus:border-nexus-accent outline-none transition-colors"
                                     placeholder="••••••••"
                                     value={passwordInput}
                                     onChange={(e) => setPasswordInput(e.target.value)}
@@ -203,8 +236,8 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                  <div className="hidden md:block w-px h-48 bg-nexus-border"></div>
                  <div className="flex-1 text-center md:text-left">
                      <Shield size={48} className="text-nexus-accent mb-4 mx-auto md:mx-0" />
-                     <h4 className="text-lg font-bold text-white mb-2">{t('settings.privacyTitle')}</h4>
-                     <p className="text-sm text-gray-400">
+                     <h4 className="text-lg font-bold text-nexus-text-primary mb-2">{t('settings.privacyTitle')}</h4>
+                     <p className="text-sm text-nexus-text-secondary">
                          {t('settings.privacyDesc')}
                      </p>
                  </div>
@@ -216,10 +249,10 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                          {user.avatar || user.name.charAt(0)}
                      </div>
                      <div>
-                         <h3 className="text-xl font-bold text-white">{user.name}</h3>
-                         <div className="text-gray-400">{user.email}</div>
+                         <h3 className="text-xl font-bold text-nexus-text-primary">{user.name}</h3>
+                         <div className="text-nexus-text-secondary">{user.email}</div>
                          <div className="mt-2 flex items-center gap-2">
-                             <span className="text-xs bg-nexus-950 border border-nexus-border px-2 py-0.5 rounded text-gray-300">
+                             <span className="text-xs bg-nexus-950 border border-nexus-border px-2 py-0.5 rounded text-nexus-text-secondary">
                                  ID: {user.id}
                              </span>
                              {user.subscription.status === 'active' ? (
@@ -235,7 +268,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                      </div>
                  </div>
                  <div className="flex gap-3">
-                     <button className="px-4 py-2 bg-nexus-950 border border-nexus-border text-gray-300 rounded-lg hover:bg-nexus-800 transition-colors">
+                     <button className="px-4 py-2 bg-nexus-950 border border-nexus-border text-nexus-text-secondary rounded-lg hover:bg-nexus-800 transition-colors">
                          {t('settings.billing')}
                      </button>
                      <button 
@@ -252,7 +285,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
       <div className="w-full h-px bg-nexus-border mb-10"></div>
 
       {/* ENGINE CONFIGURATION */}
-      <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2">
+      <h2 className="text-sm font-bold text-nexus-text-secondary uppercase tracking-wider mb-4 flex items-center gap-2">
         <Cpu size={16} /> {t('settings.inferenceEngine')}
       </h2>
 
@@ -260,7 +293,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
       <div className="bg-nexus-900 border border-nexus-border rounded-xl p-1 mb-8 flex">
         <button 
             onClick={() => setComputeMode('local')}
-            className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-lg transition-all ${computeMode === 'local' ? 'bg-nexus-800 shadow text-white' : 'text-gray-500 hover:text-gray-300'}`}
+            className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-lg transition-all ${computeMode === 'local' ? 'bg-nexus-800 shadow text-nexus-text-primary' : 'text-nexus-text-secondary hover:text-nexus-text-primary'}`}
         >
             <Cpu size={20} className={computeMode === 'local' ? 'text-nexus-accent' : ''} />
             <div className="text-left">
@@ -276,7 +309,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                 }
                 setComputeMode('cloud');
             }}
-            className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-lg transition-all ${computeMode === 'cloud' ? 'bg-nexus-800 shadow text-white' : 'text-gray-500 hover:text-gray-300'} ${!user ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-lg transition-all ${computeMode === 'cloud' ? 'bg-nexus-800 shadow text-nexus-text-primary' : 'text-nexus-text-secondary hover:text-nexus-text-primary'} ${!user ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
             <Cloud size={20} className={computeMode === 'cloud' ? 'text-blue-400' : ''} />
              <div className="text-left">
@@ -297,13 +330,13 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
              <div className="flex border-b border-nexus-border mb-6">
                 <button 
                    onClick={() => setLocalProvider('native')}
-                   className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${localProvider === 'native' ? 'border-nexus-accent text-nexus-accent' : 'border-transparent text-gray-500 hover:text-gray-300'}`}
+                   className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${localProvider === 'native' ? 'border-nexus-accent text-nexus-accent' : 'border-transparent text-nexus-text-secondary hover:text-nexus-text-primary'}`}
                 >
                    <span className="flex items-center gap-2"><HardDrive size={14}/> {t('settings.builtinEngine')}</span>
                 </button>
                 <button 
                    onClick={() => setLocalProvider('ollama')}
-                   className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${localProvider === 'ollama' ? 'border-nexus-accent text-nexus-accent' : 'border-transparent text-gray-500 hover:text-gray-300'}`}
+                   className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${localProvider === 'ollama' ? 'border-nexus-accent text-nexus-accent' : 'border-transparent text-nexus-text-secondary hover:text-nexus-text-primary'}`}
                 >
                    <span className="flex items-center gap-2"><Network size={14}/> {t('settings.externalEndpoint')}</span>
                 </button>
@@ -319,19 +352,19 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                                 <HardDrive size={24} className="text-nexus-accent" />
                             </div>
                             <div>
-                                <div className="text-white font-semibold">{t('settings.localStorage')}</div>
-                                <div className="text-sm text-gray-500">{t('settings.using')} {formatSize(getDiskUsage())} {t('settings.available')}</div>
+                                <div className="text-nexus-text-primary font-semibold">{t('settings.localStorage')}</div>
+                                <div className="text-sm text-nexus-text-secondary">{t('settings.using')} {formatSize(getDiskUsage())} {t('settings.available')}</div>
                             </div>
                         </div>
                         <div className="text-right">
-                            <div className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-1">{t('settings.recommended')}</div>
-                            <div className="text-sm text-gray-300">16GB RAM + GPU (Metal/CUDA)</div>
+                            <div className="text-xs text-nexus-text-secondary uppercase font-bold tracking-wider mb-1">{t('settings.recommended')}</div>
+                            <div className="text-sm text-gray-400">16GB RAM + GPU (Metal/CUDA)</div>
                         </div>
                     </div>
 
                     {/* LLM Section */}
                     <div>
-                        <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <h3 className="text-sm font-bold text-nexus-text-secondary uppercase tracking-wider mb-4 flex items-center gap-2">
                             <Activity size={16} /> {t('settings.llm')}
                         </h3>
                         <div className="space-y-3">
@@ -351,7 +384,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
 
                     {/* Embeddings Section */}
                     <div>
-                        <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <h3 className="text-sm font-bold text-nexus-text-secondary uppercase tracking-wider mb-4 flex items-center gap-2">
                             <Server size={16} /> {t('settings.embedding')}
                         </h3>
                         <div className="space-y-3">
@@ -377,8 +410,8 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                      <div className="bg-nexus-900 border border-nexus-border rounded-xl p-6">
                          <div className="flex items-start justify-between">
                              <div>
-                                 <h3 className="text-lg font-bold text-white mb-1">{t('settings.customEndpoint')}</h3>
-                                 <p className="text-sm text-gray-400">{t('settings.customEndpointDesc')}</p>
+                                 <h3 className="text-lg font-bold text-nexus-text-primary mb-1">{t('settings.customEndpoint')}</h3>
+                                 <p className="text-sm text-nexus-text-secondary">{t('settings.customEndpointDesc')}</p>
                              </div>
                              <div className={`px-3 py-1 rounded-full text-xs font-bold border flex items-center gap-2 ${connectionStatus === 'connected' ? 'bg-green-900/30 text-green-400 border-green-900/50' : 'bg-gray-800 text-gray-500 border-gray-700'}`}>
                                  <div className={`w-2 h-2 rounded-full ${connectionStatus === 'connected' ? 'bg-green-400' : 'bg-gray-500'}`}></div>
@@ -388,12 +421,12 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
 
                          <div className="mt-6 flex gap-4">
                              <div className="flex-1 relative">
-                                 <LinkIcon size={16} className="absolute left-3 top-3 text-gray-500" />
+                                 <LinkIcon size={16} className="absolute left-3 top-3 text-nexus-text-secondary" />
                                  <input 
                                      type="text" 
                                      value={endpointUrl}
                                      onChange={(e) => setEndpointUrl(e.target.value)}
-                                     className="w-full bg-nexus-950 border border-nexus-border rounded-lg pl-10 pr-4 py-2.5 text-white focus:border-nexus-accent outline-none font-mono text-sm"
+                                     className="w-full bg-nexus-950 border border-nexus-border rounded-lg pl-10 pr-4 py-2.5 text-nexus-text-primary focus:border-nexus-accent outline-none font-mono text-sm"
                                  />
                              </div>
                              <button 
@@ -409,12 +442,12 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
 
                      {connectionStatus === 'connected' && (
                          <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-                             <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+                             <h3 className="text-sm font-bold text-nexus-text-secondary uppercase tracking-wider mb-4 flex items-center gap-2">
                                 <Network size={16} /> {t('settings.discoveredModels')}
                              </h3>
                              <div className="space-y-3">
                                  {externalModels.length === 0 ? (
-                                     <div className="text-gray-500 italic p-4 text-center">{t('settings.noModels')}</div>
+                                     <div className="text-nexus-text-secondary italic p-4 text-center">{t('settings.noModels')}</div>
                                  ) : (
                                      externalModels.map(model => (
                                         <div key={model.id} className={`flex items-center justify-between p-4 rounded-xl border transition-all ${selectedExternalLLM === model.id ? 'bg-nexus-800 border-nexus-accent shadow-lg shadow-nexus-accent/10' : 'bg-nexus-900 border-nexus-border hover:border-gray-600'}`}>
@@ -427,10 +460,10 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                                                 </div>
                                                 <div>
                                                     <div className="flex items-center gap-2">
-                                                        <span className={`font-semibold ${selectedExternalLLM === model.id ? 'text-white' : 'text-gray-300'}`}>{model.name}</span>
+                                                        <span className={`font-semibold ${selectedExternalLLM === model.id ? 'text-white' : 'text-nexus-text-primary'}`}>{model.name}</span>
                                                         <span className="text-xs text-blue-400 bg-blue-900/20 px-1.5 py-0.5 rounded border border-blue-900/30">{model.provider}</span>
                                                     </div>
-                                                    <div className="text-xs text-gray-500 mt-1">{model.description}</div>
+                                                    <div className="text-xs text-nexus-text-secondary mt-1">{model.description}</div>
                                                 </div>
                                             </div>
                                             <div className="text-green-500 text-xs flex items-center">
@@ -479,9 +512,9 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                         {/* Pro Plan */}
                         <div className="bg-nexus-950 border border-nexus-border p-4 rounded-xl relative overflow-hidden group hover:border-nexus-accent transition-all">
                             <div className="absolute top-0 right-0 bg-nexus-accent text-white text-[10px] font-bold px-2 py-1 rounded-bl">{t('settings.popular')}</div>
-                            <h4 className="text-lg font-bold text-white mb-1">{t('settings.proPlan')}</h4>
-                            <div className="text-2xl font-bold text-white mb-4">$20<span className="text-sm text-gray-500 font-normal">{t('settings.month')}</span></div>
-                            <ul className="text-sm text-gray-400 space-y-2 mb-6">
+                            <h4 className="text-lg font-bold text-nexus-text-primary mb-1">{t('settings.proPlan')}</h4>
+                            <div className="text-2xl font-bold text-nexus-text-primary mb-4">$20<span className="text-sm text-nexus-text-secondary font-normal">{t('settings.month')}</span></div>
+                            <ul className="text-sm text-nexus-text-secondary space-y-2 mb-6">
                                 <li className="flex items-center"><CheckCircle size={12} className="mr-2 text-nexus-accent"/> Access to Gemini Pro</li>
                                 <li className="flex items-center"><CheckCircle size={12} className="mr-2 text-nexus-accent"/> Unlimited Cloud Embeddings</li>
                                 <li className="flex items-center"><CheckCircle size={12} className="mr-2 text-nexus-accent"/> Priority Support</li>
@@ -496,9 +529,9 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
 
                         {/* Enterprise Plan */}
                          <div className="bg-nexus-950 border border-nexus-border p-4 rounded-xl group hover:border-blue-400 transition-all">
-                            <h4 className="text-lg font-bold text-white mb-1">{t('settings.enterprisePlan')}</h4>
-                            <div className="text-2xl font-bold text-white mb-4">$50<span className="text-sm text-gray-500 font-normal">{t('settings.month')}</span></div>
-                             <ul className="text-sm text-gray-400 space-y-2 mb-6">
+                            <h4 className="text-lg font-bold text-nexus-text-primary mb-1">{t('settings.enterprisePlan')}</h4>
+                            <div className="text-2xl font-bold text-nexus-text-primary mb-4">$50<span className="text-sm text-nexus-text-secondary font-normal">{t('settings.month')}</span></div>
+                             <ul className="text-sm text-nexus-text-secondary space-y-2 mb-6">
                                 <li className="flex items-center"><CheckCircle size={12} className="mr-2 text-blue-400"/> All Pro Features</li>
                                 <li className="flex items-center"><CheckCircle size={12} className="mr-2 text-blue-400"/> GPT-4o Access</li>
                                 <li className="flex items-center"><CheckCircle size={12} className="mr-2 text-blue-400"/> Team Collaboration</li>
@@ -516,7 +549,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
 
             <div className={`bg-nexus-900 border border-nexus-border rounded-xl p-6 transition-opacity ${user.subscription.status !== 'active' ? 'opacity-50 pointer-events-none grayscale' : ''}`}>
                 <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-lg font-bold text-white">{t('settings.modelConfig')}</h3>
+                    <h3 className="text-lg font-bold text-nexus-text-primary">{t('settings.modelConfig')}</h3>
                     {user.subscription.status !== 'active' && <Lock className="text-gray-500" />}
                 </div>
                 
@@ -525,15 +558,15 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                     <div className="p-4 bg-nexus-950 border border-nexus-border rounded-lg">
                         <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center gap-2">
-                                <span className="font-semibold text-white">Google Gemini</span>
+                                <span className="font-semibold text-nexus-text-primary">Google Gemini</span>
                                 <span className="text-xs bg-green-900/30 text-green-400 px-2 py-0.5 rounded border border-green-900/50">Connected</span>
                             </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-xs text-gray-500 mb-1">{t('settings.chatModel')}</label>
+                                <label className="block text-xs text-nexus-text-secondary mb-1">{t('settings.chatModel')}</label>
                                 <select 
-                                    className="w-full bg-nexus-900 border border-nexus-border rounded p-2 text-sm text-white focus:border-nexus-accent outline-none"
+                                    className="w-full bg-nexus-900 border border-nexus-border rounded p-2 text-sm text-nexus-text-primary focus:border-nexus-accent outline-none"
                                     value={selectedCloudLLM}
                                     onChange={(e) => setSelectedCloudLLM(e.target.value)}
                                 >
@@ -543,7 +576,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onLogin, onLogout, onUpdateSu
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-xs text-gray-500 mb-1">{t('settings.apiKey')}</label>
+                                <label className="block text-xs text-nexus-text-secondary mb-1">{t('settings.apiKey')}</label>
                                 <div className="relative">
                                     <input type="password" value="************************" disabled className="w-full bg-nexus-900 border border-nexus-border rounded p-2 text-sm text-gray-500" />
                                     <Key size={14} className="absolute right-3 top-3 text-gray-500" />
@@ -594,11 +627,11 @@ const ModelRow: React.FC<{
                 
                 <div>
                     <div className="flex items-center gap-2">
-                        <span className={`font-semibold ${isActive ? 'text-white' : 'text-gray-300'}`}>{model.name}</span>
-                        <span className="text-xs text-gray-500 bg-nexus-950 px-1.5 py-0.5 rounded border border-nexus-border">{model.size}</span>
-                        {model.paramCount && <span className="text-xs text-gray-500 bg-nexus-950 px-1.5 py-0.5 rounded border border-nexus-border">{model.paramCount}</span>}
+                        <span className={`font-semibold ${isActive ? 'text-white' : 'text-nexus-text-primary'}`}>{model.name}</span>
+                        <span className="text-xs text-nexus-text-secondary bg-nexus-950 px-1.5 py-0.5 rounded border border-nexus-border">{model.size}</span>
+                        {model.paramCount && <span className="text-xs text-nexus-text-secondary bg-nexus-950 px-1.5 py-0.5 rounded border border-nexus-border">{model.paramCount}</span>}
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">{model.description}</div>
+                    <div className="text-xs text-nexus-text-secondary mt-1">{model.description}</div>
                     
                     {/* Progress Bar */}
                     {isDownloading && (
