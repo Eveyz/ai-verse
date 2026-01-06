@@ -16,6 +16,7 @@ export interface Node {
   label: string;
   type: 'concept' | 'file' | 'person' | 'function';
   val: number; // radius
+  sourceId: string; // The data source this node belongs to
 }
 
 export interface Link {
@@ -70,6 +71,20 @@ export interface TimelineEvent {
   };
 }
 
+// --- Data Source Types ---
+
+export type SourceType = 'folder' | 'upload';
+
+export interface DataSource {
+  id: string;
+  name: string;
+  path: string; // absolute path or 'internal://uploads'
+  type: SourceType;
+  itemCount: number;
+  status: 'synced' | 'indexing' | 'error' | 'paused';
+  lastSynced: string;
+}
+
 export interface LibraryFile {
   id: string;
   name: string;
@@ -77,6 +92,7 @@ export interface LibraryFile {
   type: 'pdf' | 'md' | 'code' | 'img' | 'sheet';
   lastModified: string; // ISO date
   semanticTag: string; // AI generated tag
+  sourceId: string; // Link to DataSource
 }
 
 // --- New Model Types ---

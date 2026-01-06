@@ -56,7 +56,7 @@ pub fn run() {
         .setup(|app| {
             tauri::async_runtime::block_on(async {
                 let rag = RagSystem::init().await.expect("Failed to init RAG");
-                let llm = LLMBackend::new_ollama("llama3");
+                let llm = LLMBackend::new_ollama("qwen3:8b");
 
                 // Note: We wrap the WHOLE state in Arc, but RAG is inside a Mutex
                 app.manage(Arc::new(AppState {

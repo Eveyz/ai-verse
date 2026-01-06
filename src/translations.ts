@@ -27,7 +27,9 @@ export const translations: Translations = {
       vectorStore: "Vector Store (Local)",
       memoryUsage: "Memory Usage",
       queue: "Embedding Queue",
-      activePlugins: "Active Plugins"
+      activePlugins: "Active Plugins",
+      connectedSources: "Connected Data Sources",
+      manageSources: "Manage Sources"
     },
     finder: {
       title: "Nexus Finder",
@@ -90,14 +92,27 @@ export const translations: Translations = {
     },
     library: {
       title: "Smart Library",
-      subtitle: "Dump your files here. We organize them for you.",
+      subtitle: "Manage your indexed local knowledge.",
+      sources: "Data Sources",
+      allSources: "All Sources",
+      quickUploads: "Quick Uploads",
+      addSource: "Add Folder",
+      enterFolderName: "Enter folder name alias:",
+      unifiedIndex: "Unified Index",
+      items: "items",
+      indexing: "Indexing",
+      synced: "Synced",
+      paused: "Paused",
+      error: "Error",
+      filter: "Filter",
       grid: "Grid",
       type: "Type",
       time: "Time",
       smart: "Smart",
       dropMain: "Drop files to auto-index",
       dropSub: "Supports PDF, MD, Code, Images",
-      uploaded: "Demo: Files 'uploaded' successfully!"
+      uploaded: "Demo: Files 'uploaded' successfully!",
+      noFiles: "No files found in this source."
     },
     settings: {
       title: "Settings",
@@ -147,7 +162,7 @@ export const translations: Translations = {
       themes: {
         light: "Light",
         dark: "Dark",
-        auto: "Auto"
+        system: "System"
       }
     }
   },
@@ -175,7 +190,9 @@ export const translations: Translations = {
       vectorStore: "向量存储 (本地)",
       memoryUsage: "内存占用",
       queue: "嵌入队列",
-      activePlugins: "已启用插件"
+      activePlugins: "已启用插件",
+      connectedSources: "已连接数据源",
+      manageSources: "管理数据源"
     },
     finder: {
       title: "Nexus 搜索",
@@ -238,14 +255,27 @@ export const translations: Translations = {
     },
     library: {
       title: "智能资料库",
-      subtitle: "将文件拖入此处，我们将为您自动整理。",
+      subtitle: "管理您的本地索引知识。",
+      sources: "数据源",
+      allSources: "所有来源",
+      quickUploads: "快速上传",
+      addSource: "添加文件夹",
+      enterFolderName: "输入文件夹别名:",
+      unifiedIndex: "统一索引",
+      items: "项",
+      indexing: "索引中",
+      synced: "已同步",
+      paused: "已暂停",
+      error: "错误",
+      filter: "过滤",
       grid: "网格",
       type: "类型",
       time: "时间",
       smart: "智能",
       dropMain: "拖放文件以自动索引",
       dropSub: "支持 PDF, MD, Code, Images",
-      uploaded: "演示：文件“上传”成功！"
+      uploaded: "演示：文件“上传”成功！",
+      noFiles: "在此源中未找到文件。"
     },
     settings: {
       title: "设置",
@@ -295,7 +325,7 @@ export const translations: Translations = {
       themes: {
         light: "浅色",
         dark: "深色",
-        auto: "跟随系统"
+        system: "跟随系统"
       }
     }
   }

@@ -1,18 +1,25 @@
-import { GraphData, SearchResult, TimelineEvent, LibraryFile, AIModel, UserSubscription, User } from './types';
+import { GraphData, SearchResult, TimelineEvent, LibraryFile, AIModel, UserSubscription, User, DataSource } from './types';
 
 export const MOCK_GRAPH_DATA: GraphData = {
   nodes: [
-    { id: 'RAG', label: 'RAG Architecture', type: 'concept', val: 20 },
-    { id: 'Embeddings', label: 'Vector Embeddings', type: 'concept', val: 15 },
-    { id: 'Transformer', label: 'Transformer Models', type: 'concept', val: 12 },
-    { id: 'LocalLLM', label: 'Local LLM Inference', type: 'concept', val: 15 },
-    { id: 'main.rs', label: 'main.rs', type: 'file', val: 10 },
-    { id: 'indexer.rs', label: 'indexer.rs', type: 'file', val: 10 },
-    { id: 'ProjectSpecs', label: 'ProjectSpecs.pdf', type: 'file', val: 12 },
-    { id: 'MeetingNotes', label: '2023-10-12 Meeting', type: 'file', val: 8 },
-    { id: 'Alice', label: 'Alice (Architect)', type: 'person', val: 12 },
-    { id: 'Bob', label: 'Bob (Dev)', type: 'person', val: 12 },
-    { id: 'Optimization', label: 'Optimization Strategy', type: 'concept', val: 14 },
+    // Source 1: Work Documents (Docs, Concepts about Architecture)
+    { id: 'RAG', label: 'RAG Architecture', type: 'concept', val: 20, sourceId: 'src-1' },
+    { id: 'Embeddings', label: 'Vector Embeddings', type: 'concept', val: 15, sourceId: 'src-1' },
+    { id: 'ProjectSpecs', label: 'ProjectSpecs.pdf', type: 'file', val: 12, sourceId: 'src-1' },
+    { id: 'MeetingNotes', label: '2023-10-12 Meeting', type: 'file', val: 8, sourceId: 'src-1' },
+    { id: 'Alice', label: 'Alice (Architect)', type: 'person', val: 12, sourceId: 'src-1' },
+    { id: 'Optimization', label: 'Optimization Strategy', type: 'concept', val: 14, sourceId: 'src-1' },
+    
+    // Source 2: Rust Project (Code files, technical concepts)
+    { id: 'Transformer', label: 'Transformer Models', type: 'concept', val: 12, sourceId: 'src-2' },
+    { id: 'LocalLLM', label: 'Local LLM Inference', type: 'concept', val: 15, sourceId: 'src-2' },
+    { id: 'main.rs', label: 'main.rs', type: 'file', val: 10, sourceId: 'src-2' },
+    { id: 'indexer.rs', label: 'indexer.rs', type: 'file', val: 10, sourceId: 'src-2' },
+    { id: 'Bob', label: 'Bob (Dev)', type: 'person', val: 12, sourceId: 'src-2' },
+    
+    // Uploads (Research papers)
+    { id: 'GraphRAG', label: 'Graph RAG Paper', type: 'file', val: 14, sourceId: 'default-uploads' },
+    { id: 'Research', label: 'Research Phase', type: 'concept', val: 10, sourceId: 'default-uploads' }
   ],
   links: [
     { source: 'RAG', target: 'Embeddings', value: 2 },
@@ -25,6 +32,8 @@ export const MOCK_GRAPH_DATA: GraphData = {
     { source: 'MeetingNotes', target: 'Optimization', value: 1 },
     { source: 'Optimization', target: 'indexer.rs', value: 2 },
     { source: 'Transformer', target: 'LocalLLM', value: 2 },
+    { source: 'GraphRAG', target: 'RAG', value: 3 },
+    { source: 'Research', target: 'GraphRAG', value: 2 }
   ]
 };
 
@@ -127,18 +136,48 @@ export const MOCK_TIMELINE_DATA: TimelineEvent[] = [
   }
 ];
 
+export const MOCK_DATA_SOURCES: DataSource[] = [
+  {
+    id: 'default-uploads',
+    name: 'Quick Uploads',
+    path: 'internal://uploads',
+    type: 'upload',
+    itemCount: 4,
+    status: 'synced',
+    lastSynced: 'Just now'
+  },
+  {
+    id: 'src-1',
+    name: 'Work Documents',
+    path: '~/Documents/Work',
+    type: 'folder',
+    itemCount: 154,
+    status: 'synced',
+    lastSynced: '10 min ago'
+  },
+  {
+    id: 'src-2',
+    name: 'Rust Project',
+    path: '~/Projects/Rust',
+    type: 'folder',
+    itemCount: 42,
+    status: 'indexing',
+    lastSynced: 'Syncing...'
+  }
+];
+
 export const MOCK_LIBRARY_FILES: LibraryFile[] = [
-  { id: '1', name: 'main.rs', size: '12KB', type: 'code', lastModified: '2023-10-27', semanticTag: 'Core Logic' },
-  { id: '2', name: 'architecture_v2.md', size: '45KB', type: 'md', lastModified: '2023-10-25', semanticTag: 'Architecture' },
-  { id: '3', name: 'meeting_notes_oct.txt', size: '5KB', type: 'md', lastModified: '2023-10-25', semanticTag: 'Planning' },
-  { id: '4', name: 'indexer.rs', size: '28KB', type: 'code', lastModified: '2023-10-20', semanticTag: 'Core Logic' },
-  { id: '5', name: 'optimization.txt', size: '15KB', type: 'md', lastModified: '2023-10-18', semanticTag: 'Performance' },
-  { id: '6', name: 'graph_rag_survey.pdf', size: '2.4MB', type: 'pdf', lastModified: '2023-10-10', semanticTag: 'Research' },
-  { id: '7', name: 'future_roadmap.md', size: '12KB', type: 'md', lastModified: '2023-10-10', semanticTag: 'Planning' },
-  { id: '8', name: 'budget_Q4.xlsx', size: '150KB', type: 'sheet', lastModified: '2023-09-15', semanticTag: 'Finance' },
-  { id: '9', name: 'logo_assets.zip', size: '50MB', type: 'img', lastModified: '2023-09-01', semanticTag: 'Assets' },
-  { id: '10', name: 'api_schema.json', size: '8KB', type: 'code', lastModified: '2023-10-22', semanticTag: 'Architecture' },
-  { id: '11', name: 'benchmark_results.csv', size: '2MB', type: 'sheet', lastModified: '2023-10-18', semanticTag: 'Performance' },
+  { id: '1', name: 'main.rs', size: '12KB', type: 'code', lastModified: '2023-10-27', semanticTag: 'Core Logic', sourceId: 'src-2' },
+  { id: '2', name: 'architecture_v2.md', size: '45KB', type: 'md', lastModified: '2023-10-25', semanticTag: 'Architecture', sourceId: 'src-1' },
+  { id: '3', name: 'meeting_notes_oct.txt', size: '5KB', type: 'md', lastModified: '2023-10-25', semanticTag: 'Planning', sourceId: 'src-1' },
+  { id: '4', name: 'indexer.rs', size: '28KB', type: 'code', lastModified: '2023-10-20', semanticTag: 'Core Logic', sourceId: 'src-2' },
+  { id: '5', name: 'optimization.txt', size: '15KB', type: 'md', lastModified: '2023-10-18', semanticTag: 'Performance', sourceId: 'src-1' },
+  { id: '6', name: 'graph_rag_survey.pdf', size: '2.4MB', type: 'pdf', lastModified: '2023-10-10', semanticTag: 'Research', sourceId: 'default-uploads' },
+  { id: '7', name: 'future_roadmap.md', size: '12KB', type: 'md', lastModified: '2023-10-10', semanticTag: 'Planning', sourceId: 'default-uploads' },
+  { id: '8', name: 'budget_Q4.xlsx', size: '150KB', type: 'sheet', lastModified: '2023-09-15', semanticTag: 'Finance', sourceId: 'default-uploads' },
+  { id: '9', name: 'logo_assets.zip', size: '50MB', type: 'img', lastModified: '2023-09-01', semanticTag: 'Assets', sourceId: 'default-uploads' },
+  { id: '10', name: 'api_schema.json', size: '8KB', type: 'code', lastModified: '2023-10-22', semanticTag: 'Architecture', sourceId: 'src-2' },
+  { id: '11', name: 'benchmark_results.csv', size: '2MB', type: 'sheet', lastModified: '2023-10-18', semanticTag: 'Performance', sourceId: 'src-1' },
 ];
 
 export const MOCK_MODELS: AIModel[] = [
